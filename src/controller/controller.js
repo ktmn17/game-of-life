@@ -1,34 +1,38 @@
 import View from '../view/view.js';
+import Model from '../model/gameScreen.js';
 
-export default class controller {
+export default class Controller {
   constructor() {
-    let input = document.querySelector('.window__input');
-    let play = document.querySelector('.window__button_play');
-    let pause = document.querySelector('.window__button_pause');
-    let clear = document.querySelector('.window__button_clear');
+    let view = new View();
+    let model = new Model();
+
+    let input = view.input;
+    let play = view.play;
+    let pause = view.pause;
+    let clear = view.clear;
     let timerId;
 
-    let gameScreen = new View();
-    let cells = gameScreen.createArray(input.value);
+    let cells = model.createCells(input.value);
 
     document.addEventListener("DOMContentLoaded", function() {
-      gameScreen.draw(cells);
+      view.draw(cells);
     });
 
     input.onblur = function() {
       clearInterval(timerId);
 
-      cells = gameScreen.createArray(input.value);
+      cells = model.createCells(input.value);  
 
-      gameScreen.removeChildren();
-      gameScreen.draw(cells);
+      view.draw(cells);
     }
 
     play.onclick = function() {
       clearInterval(timerId);
 
       timerId = setInterval(function() {
-        gameScreen.draw(cells);
+        cells = model.updateCells(cells);
+
+        view.draw(cells);
       }, 500);
     }
 
@@ -39,11 +43,9 @@ export default class controller {
     clear.onclick = function() {
       clearInterval(timerId);
 
-      let gameScreen = new View();
-      cells = gameScreen.createArray(input.value);
+      cells = model.createCells(input.value);
 
-      gameScreen.removeChildren();
-      gameScreen.draw(cells);
+      view.draw(cells);
     }
   }
 }

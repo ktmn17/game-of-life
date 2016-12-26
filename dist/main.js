@@ -701,12 +701,16 @@
 
 	var _view2 = _interopRequireDefault(_view);
 
+	var _gameScreen = __webpack_require__(10);
+
+	var _gameScreen2 = _interopRequireDefault(_gameScreen);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var controller = function controller() {
-	  _classCallCheck(this, controller);
+	var Controller = function Controller() {
+	  _classCallCheck(this, Controller);
 
 	  var input = document.querySelector('.window__input');
 	  var play = document.querySelector('.window__button_play');
@@ -714,27 +718,31 @@
 	  var clear = document.querySelector('.window__button_clear');
 	  var timerId = void 0;
 
-	  var gameScreen = new _view2.default();
-	  var cells = gameScreen.createArray(input.value);
+	  var view = new _view2.default();
+	  var model = new _gameScreen2.default();
+
+	  var cells = model.createArray(input.value);
 
 	  document.addEventListener("DOMContentLoaded", function () {
-	    gameScreen.draw(cells);
+	    view.draw(cells);
 	  });
 
 	  input.onblur = function () {
 	    clearInterval(timerId);
 
-	    cells = gameScreen.createArray(input.value);
+	    cells = model.createArray(input.value);
+	    cells = model.updateCells(cells);
 
-	    gameScreen.removeChildren();
-	    gameScreen.draw(cells);
+	    view.draw(cells);
 	  };
 
 	  play.onclick = function () {
 	    clearInterval(timerId);
 
 	    timerId = setInterval(function () {
-	      gameScreen.draw(cells);
+	      cells = model.updateCells(cells);
+
+	      view.draw(cells);
 	    }, 500);
 	  };
 
@@ -745,19 +753,18 @@
 	  clear.onclick = function () {
 	    clearInterval(timerId);
 
-	    var gameScreen = new _view2.default();
-	    cells = gameScreen.createArray(input.value);
+	    cells = model.createArray(input.value);
 
-	    gameScreen.removeChildren();
-	    gameScreen.draw(cells);
+	    view.removeChildren();
+	    view.draw(cells);
 	  };
 	};
 
-	exports.default = controller;
+	exports.default = Controller;
 
 /***/ },
 /* 9 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	'use strict';
 
@@ -767,40 +774,23 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _model = __webpack_require__(10);
-
-	var _model2 = _interopRequireDefault(_model);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var WindowGame = function () {
-	  function WindowGame() {
-	    _classCallCheck(this, WindowGame);
+	var View = function () {
+	  function View() {
+	    _classCallCheck(this, View);
 
 	    this.elem = document.querySelector('.window__game');
 	  }
 
-	  _createClass(WindowGame, [{
-	    key: 'createArray',
-	    value: function createArray(length) {
-	      var cells = [];
-	      for (var i = 0; i < length; i++) {
-	        var cellsRow = [];
-	        for (var j = 0; j < length; j++) {
-	          var currentCell = new _model2.default();
-	          cellsRow.push(currentCell);
-	        }
-
-	        cells.push(cellsRow);
-	      }
-	      return cells;
-	    }
-	  }, {
+	  _createClass(View, [{
 	    key: 'draw',
 	    value: function draw(cells) {
-	      this.updateCells(cells);
+	      var _this = this;
+
+	      this.removeChildren();
+
+	      var self = this;
 
 	      for (var i = 0; i < cells.length; i++) {
 
@@ -810,16 +800,16 @@
 
 	        var _loop = function _loop(j) {
 	          var cell = cells[i][j];
-	          var elem = cell.elem;
+	          var elem = _this.createElemCell();
 
 	          elem.onclick = function () {
-	            if (cell.condition == true) {
-	              cell.makeDead();
-	            } else cell.makeAlive();
+	            if (cell.condition == cell.alive) {
+	              self.makeDead(cell, elem);
+	            } else self.makeAlive(cell, elem);
 	          };
 
-	          if (cell.condition == true) cell.makeAlive();
-	          if (cell.condition == false) cell.makeDead();
+	          if (cell.condition == cell.alive) _this.makeAlive(cell, elem);
+	          if (cell.condition == cell.dead) _this.makeDead(cell, elem);
 
 	          row.appendChild(elem);
 	        };
@@ -830,31 +820,113 @@
 	      }
 	    }
 	  }, {
+	    key: 'createElemCell',
+	    value: function createElemCell() {
+	      var elem = document.createElement('div');
+	      elem.classList.add('window__cell');
+	      return elem;
+	    }
+	  }, {
+	    key: 'makeAlive',
+	    value: function makeAlive(cell, elem) {
+	      cell.setAlive();
+	      elem.classList.add('window__cell_enable');
+	    }
+	  }, {
+	    key: 'makeDead',
+	    value: function makeDead(cell, elem) {
+	      cell.setDead();
+	      elem.classList.remove('window__cell_enable');
+	    }
+	  }, {
+	    key: 'removeChildren',
+	    value: function removeChildren() {
+	      while (this.elem.children.length) {
+	        this.elem.removeChild(this.elem.children[0]);
+	      }
+	    }
+	  }]);
+
+	  return View;
+	}();
+
+	exports.default = View;
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _cell = __webpack_require__(11);
+
+	var _cell2 = _interopRequireDefault(_cell);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Model = function () {
+	  function Model() {
+	    _classCallCheck(this, Model);
+	  }
+
+	  _createClass(Model, [{
+	    key: 'createArray',
+	    value: function createArray(length) {
+	      var cells = [];
+
+	      for (var i = 0; i < length; i++) {
+	        var cellsRow = [];
+
+	        for (var j = 0; j < length; j++) {
+	          var cell = new _cell2.default();
+	          cellsRow.push(cell);
+	        }
+	        cells.push(cellsRow);
+	      }
+
+	      return cells;
+	    }
+	  }, {
 	    key: 'updateCells',
 	    value: function updateCells(cells) {
+	      var newCells = this.createArray(cells.length);
+
 	      for (var i = 0; i < cells.length; i++) {
 
 	        for (var j = 0; j < cells[i].length; j++) {
-	          var _cell = cells[i][j];
+	          var cell = cells[i][j];
+	          var newCell = newCells[i][j];
 	          var countTrue = this.checkNeighbors(cells, i, j);
 
-	          if (_cell.condition == false) {
-	            if (countTrue === 3) _cell.condition = true;
+	          newCell.condition = cell.condition;
+
+	          if (cell.condition == cell.dead) {
+	            if (countTrue === 3) newCell.condition = newCell.alive;
 	          }
-	          if (_cell.condition == true) {
-	            if (countTrue < 2 || countTrue > 3) _cell.condition = false;
+	          if (cell.condition == cell.alive) {
+	            if (countTrue < 2 || countTrue > 3) newCell.condition = newCell.dead;
 	          }
 	        }
 	      }
-	      return cells;
+
+	      return newCells;
 	    }
 	  }, {
 	    key: 'checkNeighbors',
 	    value: function checkNeighbors(cells, i, j) {
 	      var neighbors = this.getNeighbors(cells, i, j);
 	      var countTrue = 0;
+
 	      for (var x = 0; x < neighbors.length; x++) {
-	        if (!neighbors[x].elem.matches('.window__cell_enable')) continue;else {
+	        if (neighbors[x].condition == neighbors[x].dead) continue;else {
 	          countTrue++;
 	          if (countTrue > 3) return 4;
 	        }
@@ -866,37 +938,32 @@
 	    key: 'getNeighbors',
 	    value: function getNeighbors(cells, i, j) {
 	      var neighbors = [];
+
 	      first: for (var x = -1; x <= 1; x++) {
-	        if (i + x < 0 || i + x > cells.length - 1) continue first;
+	        if (i + x < 0 || i + x > cells.length - 1) continue first; // row doesnt exist
 
 	        second: for (var y = -1; y <= 1; y++) {
-	          if (j + y < 0 || j + y > cells[i].length - 1) continue second;
-	          if (x == 0 && y == 0) continue second;
+	          if (j + y < 0 || j + y > cells[i].length - 1) continue second; // cell doesnt exist
+	          if (x == 0 && y == 0) continue second; // cell itself
 
 	          neighbors.push(cells[i + x][j + y]);
 	        }
 	      }
+
 	      return neighbors;
-	    }
-	  }, {
-	    key: 'removeChildren',
-	    value: function removeChildren() {
-	      while (this.elem.children.length) {
-	        this.elem.removeChild(this.elem.children[0]);
-	      }
 	    }
 	  }]);
 
-	  return WindowGame;
+	  return Model;
 	}();
 
-	exports.default = WindowGame;
+	exports.default = Model;
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -911,20 +978,19 @@
 	    _classCallCheck(this, Cell);
 
 	    this.condition = false;
-	    this.elem = createElemCell();
+	    this.alive = true;
+	    this.dead = false;
 	  }
 
 	  _createClass(Cell, [{
-	    key: 'makeAlive',
-	    value: function makeAlive() {
-	      this.condition = true;
-	      this.elem.classList.add('window__cell_enable');
+	    key: "setAlive",
+	    value: function setAlive() {
+	      this.condition = this.alive;
 	    }
 	  }, {
-	    key: 'makeDead',
-	    value: function makeDead() {
-	      this.condition = false;
-	      this.elem.classList.remove('window__cell_enable');
+	    key: "setDead",
+	    value: function setDead() {
+	      this.condition = this.dead;
 	    }
 	  }]);
 
@@ -932,13 +998,6 @@
 	}();
 
 	exports.default = Cell;
-
-
-	function createElemCell() {
-	  var elem = document.createElement('div');
-	  elem.classList.add('window__cell');
-	  return elem;
-	};
 
 /***/ }
 /******/ ]);

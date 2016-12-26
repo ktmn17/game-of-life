@@ -1,26 +1,17 @@
-import Cell from '../model/model.js';
-
-export default class WindowGame {
+export default class View {
   constructor() {
     this.elem = document.querySelector('.window__game');
-  }
 
-  createArray(length) {
-    let cells = [];
-    for (let i = 0; i < length; i++) {
-      let cellsRow = [];
-      for (let j = 0; j < length; j++) {
-        let currentCell = new Cell();
-        cellsRow.push(currentCell);
-      }
-
-      cells.push(cellsRow);
-    }
-    return cells;
+    this.input = document.querySelector('.window__input');
+    this.play = document.querySelector('.window__button_play');
+    this.pause = document.querySelector('.window__button_pause');
+    this.clear = document.querySelector('.window__button_clear');
   }
 
   draw(cells) {
-    this.updateCells(cells);
+    this.removeChildren();
+
+    let self = this;
 
     for (let i = 0; i < cells.length; i++) {
 
@@ -30,67 +21,36 @@ export default class WindowGame {
 
       for (let j = 0; j < cells[i].length; j++) {
         let cell = cells[i][j];
-        let elem = cell.elem;
+        let elem = this.createElemCell();
 
         elem.onclick = function() {
-          if (cell.condition == true) {
-            cell.makeDead();
-          } else cell.makeAlive();
+          if (cell.condition == cell.alive) {
+            self.makeDead(cell, elem);
+          } else self.makeAlive(cell, elem);
         }
 
-        if (cell.condition == true) cell.makeAlive();
-        if (cell.condition == false) cell.makeDead();
+        if (cell.condition == cell.alive) this.makeAlive(cell, elem)
+        if (cell.condition == cell.dead) this.makeDead(cell, elem)
 
         row.appendChild(elem);
       }
     }
   }
 
-  updateCells(cells) {
-    for (let i = 0; i < cells.length; i++) {
-
-      for (let j = 0; j < cells[i].length; j++) {
-        let cell = cells[i][j];
-        let countTrue = this.checkNeighbors(cells, i, j);
-
-        if (cell.condition == false) {
-          if (countTrue === 3) cell.condition = true;
-        }
-        if (cell.condition == true) {
-          if (countTrue < 2 || countTrue > 3) cell.condition = false;
-        }
-      }
-    }
-    return cells;
+  createElemCell() {
+    let elem = document.createElement('div');
+    elem.classList.add('window__cell');
+    return elem;
   }
 
-  checkNeighbors(cells, i, j) {
-    let neighbors = this.getNeighbors(cells, i, j);
-    let countTrue = 0;
-    for (let x = 0; x < neighbors.length; x++) {
-      if ( !(neighbors[x].elem.matches('.window__cell_enable')) ) continue;
-      else {
-        countTrue++;
-        if (countTrue > 3) return 4;
-      }
-    }
-
-    return countTrue;
+  makeAlive(cell, elem) {
+    cell.setAlive();
+    elem.classList.add('window__cell_enable');
   }
 
-  getNeighbors(cells, i, j) {
-    let neighbors = [];
-    first: for (let x = - 1; x <= 1; x++) {
-      if (i + x < 0 || i + x > cells.length - 1) continue first;
-
-      second: for (let y = -1; y <= 1; y++) {
-        if (j + y < 0 || j + y > cells[i].length - 1) continue second;
-        if (x == 0 && y == 0) continue second;
-
-        neighbors.push( cells[i + x][j + y] );
-      }
-    }
-    return neighbors;
+  makeDead(cell, elem) {
+    cell.setDead();
+    elem.classList.remove('window__cell_enable');
   }
 
   removeChildren() {
