@@ -43,6 +43,12 @@ export default class View {
     return elem;
   }
 
+  removeChildren() {
+    while (this.elem.children.length) {
+      this.elem.removeChild(this.elem.children[0]);
+    }
+  }
+
   makeAlive(cell, elem) {
     cell.setAlive();
     elem.classList.add('window__cell_enable');
@@ -51,11 +57,5 @@ export default class View {
   makeDead(cell, elem) {
     cell.setDead();
     elem.classList.remove('window__cell_enable');
-  }
-
-  removeChildren() {
-    while (this.elem.children.length) {
-      this.elem.removeChild(this.elem.children[0]);
-    }
   }
 }
