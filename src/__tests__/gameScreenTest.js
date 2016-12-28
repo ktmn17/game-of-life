@@ -4,7 +4,7 @@ import GameScreen from '../model/gameScreen.js';
 let gameScreen = new GameScreen();
 
 
-describe('test model gameScreen', function() {
+describe('model gameScreen', function() {
   it('create cells', function() {
     let cells = gameScreen.createCells(5);
     assert.equal( cells[0][0].condition, cells[0][0].dead, 'doesnt create first cell' );
@@ -53,10 +53,10 @@ describe('test model gameScreen', function() {
 
     cells = gameScreen.updateCells(cells);
 
-    assert.equal( cells[1][2].condition, cells[1][2].dead, 'line of three cell doesnt right update' );
-    assert.equal( cells[2][1].condition, cells[2][1].alive, 'line of three cell doesnt right update' );
-    assert.equal( cells[2][2].condition, cells[2][2].alive, 'line of three cell doesnt right update' );
-    assert.equal( cells[2][3].condition, cells[2][3].alive, 'line of three cell doesnt right update' );
-    assert.equal( cells[3][2].condition, cells[3][2].dead, 'line of three cell doesnt right update' );
+    assert.equal( cells[1][2].condition, cells[1][2].dead, 'update line of three cell doesnt right' );
+    assert.equal( cells[2][1].condition, cells[2][1].alive, 'update line of three cell doesnt right' );
+    assert.equal( cells[2][2].condition, cells[2][2].alive, 'update line of three cell doesnt right' );
+    assert.equal( cells[2][3].condition, cells[2][3].alive, 'update line of three cell doesnt right' );
+    assert.equal( cells[3][2].condition, cells[3][2].dead, 'update line of three cell doesnt right' );
   });
 });

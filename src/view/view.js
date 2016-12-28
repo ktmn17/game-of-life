@@ -6,27 +6,28 @@ export default class View {
     this.play = document.querySelector('.window__button_play');
     this.pause = document.querySelector('.window__button_pause');
     this.clear = document.querySelector('.window__button_clear');
+
+    this.delay = 500;
   }
 
   draw(cells) {
     this.removeChildren();
 
-    let self = this;
-
     for (let i = 0; i < cells.length; i++) {
 
       let row = document.createElement('div');
       row.classList.add('window__row');
+
       this.elem.appendChild(row);
 
       for (let j = 0; j < cells[i].length; j++) {
         let cell = cells[i][j];
         let elem = this.createElemCell();
 
-        elem.onclick = function() {
+        elem.onclick = () => {
           if (cell.condition == cell.alive) {
-            self.makeDead(cell, elem);
-          } else self.makeAlive(cell, elem);
+            this.makeDead(cell, elem);
+          } else this.makeAlive(cell, elem);
         }
 
         if (cell.condition == cell.alive) this.makeAlive(cell, elem)

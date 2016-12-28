@@ -1,14 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto')
+
 .window
   width auto
   margin 0 auto
   padding 15px
   background-color gold
+  font-family: 'Roboto', sans-serif;
 
 .window__h1
   margin 0
   padding 0
   text-align center
-  font-family Arial
+  letter-spacing 2px
 
 .window__game
   display flex
@@ -22,7 +25,20 @@
   justify-content center
 
 .window__input
-  width 55px
+  height 27px
+  width 60px
+  margin 5px
+  border 0
+  border-radius 2px
+  text-align center
+  font-size 0.95rem
+  font-family 'Roboto', sans-serif
+  transition color, background-color 0.5s
+  cursor pointer
+
+  &:hover
+    background-color black
+    color white
 
 .window__row
   display block
@@ -37,5 +53,31 @@
   border-radius 2px
   cursor pointer
 
+  &:hover
+    background-color red
+
 .window__cell_enable
   background-color white
+
+.window__controller
+  display flex
+  align-items center
+
+.window__button
+  height 27px
+  width 60px
+  margin 5px
+  border 0
+  outline 0
+  border-radius 2px
+  background-color black
+  font-size 0.9rem
+  color white
+  cursor pointer
+  font-family 'Roboto', sans-serif
+
+  &:active
+    transform scale(0.97)
+
+  &::-moz-focus-inner
+    border 0

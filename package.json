@@ -4,7 +4,9 @@
   "description": "game of life",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack",
+    "dev": "webpack-dev-server",
+    "test": "karma start karma.conf.js"
   },
   "keywords": [
     "game",

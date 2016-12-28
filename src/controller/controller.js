@@ -13,7 +13,7 @@ export default class Controller {
     let timerId;
 
     let cells = model.createCells(input.value);
-
+    
     document.addEventListener("DOMContentLoaded", function() {
       view.draw(cells);
     });
@@ -21,7 +21,7 @@ export default class Controller {
     input.onblur = function() {
       clearInterval(timerId);
 
-      cells = model.createCells(input.value);  
+      cells = model.createCells(input.value);
 
       view.draw(cells);
     }
@@ -33,7 +33,7 @@ export default class Controller {
         cells = model.updateCells(cells);
 
         view.draw(cells);
-      }, 500);
+      }, view.delay);
     }
 
     pause.onclick = function() {

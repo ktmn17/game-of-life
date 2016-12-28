@@ -10,7 +10,7 @@ document.body.innerHTML = pug();
 
 let view = new View();
 
-describe('test view', function() {
+describe('view', function() {
   it('create cell element', function() {
     let cell = view.createElemCell();
 
@@ -31,7 +31,7 @@ describe('test view', function() {
 
     view.removeChildren();
 
-    assert.equal( view.elem.childNodes.length, 0, 'doesnt remove 10 children')
+    assert.equal( view.elem.childNodes.length, 0, 'doesnt remove all children')
   });
 
   it('make cell elem and cell model alive', function() {
@@ -74,9 +74,9 @@ describe('test view', function() {
     assert( cellElems[12].classList.contains('window__cell_enable'), 'doesnt add to needed elem class window__cell_enable');
     assert( cellElems[17].classList.contains('window__cell_enable'), 'doesnt add to needed elem class window__cell_enable');
 
-    let event = new Event('click');
-    cellElems[0].dispatchEvent(event);
-    cellElems[7].dispatchEvent(event);
+    let click = new Event('click');
+    cellElems[0].dispatchEvent(click);
+    cellElems[7].dispatchEvent(click);
 
     assert( cellElems[0].classList.contains('window__cell_enable'), 'doesnt add class window__cell_enable after click on dead cell' );
     assert( !cellElems[7].classList.contains('window__cell_enable'), 'doesnt remove class window__cell_enable after click on alive cell' );

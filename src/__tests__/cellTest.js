@@ -1,7 +1,7 @@
 import assert from 'assert';
 import Cell from '../model/cell.js';
 
-describe('test model cell', function () {
+describe('model cell', function () {
     it('change the cell condition to alive', function () {
         let cell = new Cell();
         cell.setAlive();
