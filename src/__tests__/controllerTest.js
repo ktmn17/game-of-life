@@ -6,38 +6,93 @@ document.body.innerHTML = pug();
 
 import Controller from '../controller/controller.js';
 import View from '../view/view.js';
-import GameScreen from '../model/gameScreen.js';
+import Model from '../model/gameScreen.js';
 
-let controller = new Controller();
 let view = new View();
-let gameScreen = new GameScreen();
+let model = new Model();
+let controller = new Controller();
+let spyDraw;
 
 describe('controller', function() {
-  it('draw input value cells after unfocus input', function() {
-    view.input.value = 5;
 
-    let blur = new Event('blur');
-    view.input.dispatchEvent(blur);
+  beforeEach(function() {
+    spyDraw = sinon.spy(view, 'draw');
+  });
 
-    let cellElems = view.elem.querySelectorAll('.window__cell');
-    assert.equal( cellElems.length, 25, 'doest draw right numbers of cells' );
+  afterEach(function() {
+    spyDraw.restore();
   });
 
   it('turn all alive cells to dead after click clear button', function() {
-    let cells = gameScreen.createCells(5);
+    
+    view.clear.onclick = () => {
 
-    cells[0][0].setAlive();
-    cells[2][2].setAlive();
-    cells[4][4].setAlive();
-
-    view.draw(cells);
+      let cells = model.createCells(5);
+      view.draw(cells);
+    };
 
     let click = new Event('click');
     view.clear.dispatchEvent(click);
 
-    let aliveCellElems = view.elem.querySelectorAll('.window__cell_enable');
-
-    assert( !aliveCellElems.length, 'doesnt remove class window__cell_enable from all cells' );
+    assert( spyDraw.called, 'doesnt draw new cells' );
   });
 
-})
+  it('draw input.value cells after unfocus input', function() {
+
+    let input = view.input;
+    input.value = 4;
+
+    input.onblur = () => {
+
+      let cells = model.createCells(input.value);
+      view.draw(cells);
+    };
+
+    let blur = new Event('blur');
+    view.input.dispatchEvent(blur);
+
+    assert( spyDraw.called, 'doesnt draw new cells' );
+
+    let cellsElem = view.elem.querySelectorAll('.window__cell')
+    assert.equal( cellsElem.length, 16, 'doesnt draw the right number of cells' );
+  });
+
+  it('start the game after click play button and pause the game after click pause button', function(done) {
+
+    let cells = model.createCells(5);
+    let timerId;
+
+    view.play.onclick = () => {
+      cells = model.updateCells(cells);
+      view.draw(cells);
+
+      timerId = setInterval( () => {
+        cells = model.updateCells(cells);
+        view.draw(cells);
+
+      }, view.delay);
+    };
+
+    view.pause.onclick = () => {
+      clearInterval(timerId);
+    };
+
+    let click = new Event('click');
+    view.play.dispatchEvent(click);
+
+    assert( spyDraw.calledOnce, 'doesnt draw cells right off after click play' );
+
+    setTimeout(function() {
+      assert( spyDraw.calledTwice, 'doesnt draw cells second time after delay' );
+
+      view.pause.dispatchEvent(click);
+
+      setTimeout(function() {
+        assert( spyDraw.calledTwice, 'draw cells after click pause' );
+
+        done();
+      }, view.delay);
+
+    }, view.delay);
+  });
+});

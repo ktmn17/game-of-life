@@ -13,39 +13,42 @@ export default class Controller {
     let timerId;
 
     let cells = model.createCells(input.value);
-    
+
     document.addEventListener("DOMContentLoaded", function() {
       view.draw(cells);
     });
 
-    input.onblur = function() {
+    input.onblur = () => {
       clearInterval(timerId);
+
+      input.value <= 40 ? true : input.value = 40;
 
       cells = model.createCells(input.value);
-
       view.draw(cells);
-    }
+    };
 
-    play.onclick = function() {
+    play.onclick = () => {
       clearInterval(timerId);
 
-      timerId = setInterval(function() {
+      cells = model.updateCells(cells);
+      view.draw(cells);
+
+      timerId = setInterval( () => {
         cells = model.updateCells(cells);
-
         view.draw(cells);
+
       }, view.delay);
-    }
+    };
 
-    pause.onclick = function() {
+    pause.onclick = () => {
       clearInterval(timerId);
-    }
+    };
 
-    clear.onclick = function() {
+    clear.onclick = () => {
       clearInterval(timerId);
 
       cells = model.createCells(input.value);
-
       view.draw(cells);
-    }
+    };
   }
-}
+};

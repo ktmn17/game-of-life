@@ -12,14 +12,15 @@ let view = new View();
 
 describe('view', function() {
   it('create cell element', function() {
+
     let cell = view.createElemCell();
 
     assert.equal( cell.tagName, 'DIV', 'cell doesnt give tag DIV' );
     assert.equal( cell.className, 'window__cell', 'cell doesnt give class window__cell' );
   });
 
+  it('remove all cells from page', function() {
 
-  it('remove all cells from gameScreen', function() {
     let childs = [];
 
     for (let i = 0; i < 10; i++) {
@@ -35,6 +36,7 @@ describe('view', function() {
   });
 
   it('make cell elem and cell model alive', function() {
+
     let cellElem = view.createElemCell();
     let cellModel = new Cell();
 
@@ -45,6 +47,7 @@ describe('view', function() {
   });
 
   it('make cell elem and cell model dead', function() {
+
     let cellElem = view.createElemCell();
     let cellModel = new Cell();
 
@@ -55,6 +58,7 @@ describe('view', function() {
   });
 
   it('draw cells', function() {
+
     let gameScreen = new GameScreen();
     let cells = gameScreen.createCells(5);
 
@@ -67,12 +71,12 @@ describe('view', function() {
     let cellElems = view.elem.querySelectorAll('.window__cell');
 
     assert( cellElems.length, 'doesnt draw anything');
-    assert.equal( cellElems.length, 25, 'doesnt draw right number of cells');
-    assert( cellElems[0].classList.contains('window__cell'), 'doesnt add to first elem class window__cell');
-    assert( cellElems[24].classList.contains('window__cell'), 'doesnt add to last elem class window__cell');
-    assert( cellElems[7].classList.contains('window__cell_enable'), 'doesnt add to needed elem class window__cell_enable');
-    assert( cellElems[12].classList.contains('window__cell_enable'), 'doesnt add to needed elem class window__cell_enable');
-    assert( cellElems[17].classList.contains('window__cell_enable'), 'doesnt add to needed elem class window__cell_enable');
+    assert.equal( cellElems.length, 25, 'doesnt draw the right number of cells');
+    assert( cellElems[0].classList.contains('window__cell'), 'doesnt add to the first elem class window__cell');
+    assert( cellElems[24].classList.contains('window__cell'), 'doesnt add to the last elem class window__cell');
+    assert( cellElems[7].classList.contains('window__cell_enable'), 'doesnt add to the needed elem class window__cell_enable');
+    assert( cellElems[12].classList.contains('window__cell_enable'), 'doesnt add to the needed elem class window__cell_enable');
+    assert( cellElems[17].classList.contains('window__cell_enable'), 'doesnt add to the needed elem class window__cell_enable');
 
     let click = new Event('click');
     cellElems[0].dispatchEvent(click);
