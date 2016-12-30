@@ -2,7 +2,7 @@ export default class View {
   constructor() {
     this.elem = document.querySelector('.window__game');
 
-    this.input = document.querySelector('.window__input');
+    this.length = document.querySelector('.window__input');
     this.play = document.querySelector('.window__button_play');
     this.pause = document.querySelector('.window__button_pause');
     this.clear = document.querySelector('.window__button_clear');

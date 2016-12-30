@@ -1,7 +1,3 @@
-/**
- * Created by clicktronix on 12.11.16.
- */
-
 'use strict';
 
 let webpackConfig = require('./webpack.config.js');

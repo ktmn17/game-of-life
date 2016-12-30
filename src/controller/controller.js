@@ -3,52 +3,73 @@ import Model from '../model/gameScreen.js';
 
 export default class Controller {
   constructor() {
-    let view = new View();
-    let model = new Model();
+    this.view = new View();
+    this.model = new Model();
 
-    let input = view.input;
-    let play = view.play;
-    let pause = view.pause;
-    let clear = view.clear;
-    let timerId;
+    this.length = this.view.length;
+    this.play = this.view.play;
+    this.pause = this.view.pause;
+    this.clear = this.view.clear;
 
-    let cells = model.createCells(input.value);
+    this.timerId;
+    this.cells;
+  }
 
-    document.addEventListener("DOMContentLoaded", function() {
-      view.draw(cells);
+  startGame() {
+    document.addEventListener("DOMContentLoaded", () => {
+      this.drawInitialCells();
     });
 
-    input.onblur = () => {
-      clearInterval(timerId);
+    this.lengthHandler();
+    this.playHandler();
+    this.pauseHandler();
+    this.clearHandler();
+  }
 
-      input.value <= 40 ? true : input.value = 40;
+  lengthHandler() {
+    this.length.onblur = () => {
+      clearInterval(this.timerId);
 
-      cells = model.createCells(input.value);
-      view.draw(cells);
-    };
+      this.length.value <= 40 ? true : this.length.value = 40;
 
-    play.onclick = () => {
-      clearInterval(timerId);
-
-      cells = model.updateCells(cells);
-      view.draw(cells);
-
-      timerId = setInterval( () => {
-        cells = model.updateCells(cells);
-        view.draw(cells);
-
-      }, view.delay);
-    };
-
-    pause.onclick = () => {
-      clearInterval(timerId);
-    };
-
-    clear.onclick = () => {
-      clearInterval(timerId);
-
-      cells = model.createCells(input.value);
-      view.draw(cells);
+      this.drawInitialCells();
     };
   }
-};
+
+  playHandler() {
+    this.play.onclick = () => {
+      clearInterval(this.timerId);
+
+      this.drawUpdateCells();
+
+      this.timerId = setInterval( () => {
+        this.drawUpdateCells();
+
+      }, this.view.delay);
+    };
+  }
+
+  pauseHandler() {
+    this.pause.onclick = () => {
+      clearInterval(this.timerId);
+    };
+  }
+
+  clearHandler() {
+    this.clear.onclick = () => {
+      clearInterval(this.timerId);
+
+      this.drawInitialCells();
+    };
+  }
+
+  drawInitialCells() {
+    this.cells = this.model.createCells(this.length.value);
+    this.view.draw(this.cells);
+  }
+
+  drawUpdateCells() {
+    this.cells = this.model.updateCells(this.cells);
+    this.view.draw(this.cells);
+  }
+}
