@@ -2,10 +2,16 @@
 ### realization of conway's game of life
 
 ####for launch webpack
-`npm run build`
+```
+npm run build
+```
 
 ####for launch webpack-dev-server
-`npm run dev`
+```
+npm run dev
+```
 
 #### for launch karma
-`npm run test`
+```
+npm run test
+```
