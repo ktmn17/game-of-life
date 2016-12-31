@@ -4,7 +4,6 @@ export default class View {
 
     this.length = document.querySelector('.window__input');
     this.play = document.querySelector('.window__button_play');
-    this.pause = document.querySelector('.window__button_pause');
     this.clear = document.querySelector('.window__button_clear');
 
     this.delay = 500;
@@ -59,4 +58,10 @@ export default class View {
     cell.setDead();
     elem.classList.remove('window__cell_enable');
   }
+
+  changePlayButton() {
+    if ( this.play.textContent == 'Play' ) this.play.textContent = 'Pause';
+    else this.play.textContent = 'Play';
+  }
+
 }

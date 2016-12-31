@@ -2,7 +2,7 @@ import Cell from './cell.js';
 
 export default class Model {
   constructor() {
-
+    
   }
 
   createCells(length) {
@@ -22,25 +22,23 @@ export default class Model {
   }
 
   updateCells(cells) {
-    let newCells = this.createCells(cells.length);
+    let newCells = cells.map( (row, i) => {
 
-    for (let i = 0; i < cells.length; i++) {
-
-      for (let j = 0; j < cells[i].length; j++) {
-        let cell = cells[i][j];
-        let newCell = newCells[i][j];
-        let countTrue = this.checkNeighbors(cells, i, j);
-
+      return row.map( (cell, j) => {
+        let newCell = new Cell();
         newCell.condition = cell.condition;
 
+        let countTrue = this.checkNeighbors(cells, i, j);
+
         if (cell.condition == cell.dead) {
-          if (countTrue === 3) newCell.condition = newCell.alive;
+          if (countTrue === 3) newCell.setAlive();
+        } else {
+          if (countTrue < 2 || countTrue > 3) newCell.setDead();
         }
-        if (cell.condition == cell.alive) {
-          if (countTrue < 2 || countTrue > 3) newCell.condition = newCell.dead;
-        }
-      }
-    }
+
+        return newCell;
+      });
+    });
 
     return newCells;
   }

@@ -22,7 +22,6 @@ export default class Controller {
 
     this.lengthHandler();
     this.playHandler();
-    this.pauseHandler();
     this.clearHandler();
   }
 
@@ -46,12 +45,18 @@ export default class Controller {
         this.drawUpdateCells();
 
       }, this.view.delay);
+
+      this.view.changePlayButton();
+      this.pauseHandler();
     };
   }
 
   pauseHandler() {
-    this.pause.onclick = () => {
+    this.play.onclick = () => {
       clearInterval(this.timerId);
+
+      this.view.changePlayButton();
+      this.playHandler();
     };
   }
 
