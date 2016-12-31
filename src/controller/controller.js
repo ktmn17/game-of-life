@@ -12,10 +12,9 @@ export default class Controller {
     this.clear = this.view.clear;
 
     this.timerId;
-    this.cells;
   }
 
-  startGame() {
+  setUpGame() {
     document.addEventListener("DOMContentLoaded", () => {
       this.drawInitialCells();
     });
@@ -27,7 +26,7 @@ export default class Controller {
 
   lengthHandler() {
     this.length.onblur = () => {
-      clearInterval(this.timerId);
+      this.pauseGame();
 
       this.length.value <= 40 ? true : this.length.value = 40;
 
@@ -37,44 +36,56 @@ export default class Controller {
 
   playHandler() {
     this.play.onclick = () => {
-      clearInterval(this.timerId);
-
-      this.drawUpdateCells();
-
-      this.timerId = setInterval( () => {
-        this.drawUpdateCells();
-
-      }, this.view.delay);
-
-      this.view.changePlayButton();
-      this.pauseHandler();
+      this.startGame();
     };
   }
 
   pauseHandler() {
     this.play.onclick = () => {
-      clearInterval(this.timerId);
-
-      this.view.changePlayButton();
-      this.playHandler();
+      this.pauseGame();
     };
   }
 
   clearHandler() {
     this.clear.onclick = () => {
-      clearInterval(this.timerId);
+      this.pauseGame();
 
       this.drawInitialCells();
     };
   }
 
+  startGame() {
+    this.model.gameCondition = true;
+    clearInterval(this.timerId);
+
+    this.drawUpdateCells();
+
+    this.view.changePlayButton();
+    this.pauseHandler();
+
+    this.timerId = setInterval( () => {
+      this.drawUpdateCells();
+
+    }, this.view.delay);
+  }
+
+  pauseGame() {
+    if (this.model.gameCondition) {
+      this.view.changePlayButton();
+      this.playHandler();
+    }
+
+    this.model.gameCondition = false;
+    clearInterval(this.timerId);
+  }
+
   drawInitialCells() {
-    this.cells = this.model.createCells(this.length.value);
-    this.view.draw(this.cells);
+    this.model.createCells(this.length.value);
+    this.view.draw(this.model.cells);
   }
 
   drawUpdateCells() {
-    this.cells = this.model.updateCells(this.cells);
-    this.view.draw(this.cells);
+    this.model.updateCells();
+    this.view.draw(this.model.cells);
   }
 }

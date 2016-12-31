@@ -2,7 +2,8 @@ import Cell from './cell.js';
 
 export default class Model {
   constructor() {
-    
+    this.cells = [];
+    this.gameCondition = false; // game are in process or not
   }
 
   createCells(length) {
@@ -18,17 +19,17 @@ export default class Model {
       cells.push(cellsRow);
     }
 
-    return cells;
+    this.cells = cells;
   }
 
-  updateCells(cells) {
-    let newCells = cells.map( (row, i) => {
+  updateCells() {
+    let newCells = this.cells.map( (row, i) => {
 
       return row.map( (cell, j) => {
         let newCell = new Cell();
         newCell.condition = cell.condition;
 
-        let countTrue = this.checkNeighbors(cells, i, j);
+        let countTrue = this.checkNeighbors(this.cells, i, j);
 
         if (cell.condition == cell.dead) {
           if (countTrue === 3) newCell.setAlive();
@@ -40,7 +41,7 @@ export default class Model {
       });
     });
 
-    return newCells;
+    this.cells = newCells;
   }
 
   checkNeighbors(cells, i, j) {
