@@ -1,4 +1,3 @@
-import assert from 'assert';
 import Cell from '../model/cell.js';
 
 describe('model cell', function () {
