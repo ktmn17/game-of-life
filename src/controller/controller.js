@@ -15,9 +15,7 @@ export default class Controller {
   }
 
   setUpGame() {
-    document.addEventListener("DOMContentLoaded", () => {
-      this.drawInitialCells();
-    });
+    this.drawInitialCells();
 
     this.lengthHandler();
     this.playHandler();
@@ -66,7 +64,7 @@ export default class Controller {
     this.timerId = setInterval( () => {
       this.drawUpdateCells();
 
-    }, this.view.delay);
+    }, this.model.delay);
   }
 
   pauseGame() {

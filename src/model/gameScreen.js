@@ -4,6 +4,7 @@ export default class Model {
   constructor() {
     this.cells = [];
     this.gameCondition = false; // game are in process or not
+    this.delay = 500;
   }
 
   createCells(length) {

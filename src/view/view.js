@@ -5,8 +5,6 @@ export default class View {
     this.length = document.querySelector('.window__input');
     this.play = document.querySelector('.window__button_play');
     this.clear = document.querySelector('.window__button_clear');
-
-    this.delay = 500;
   }
 
   draw(cells) {
