@@ -3,7 +3,7 @@ import style from './style.styl';
 
 document.body.innerHTML = pug();
 
-import Controller from './controller/controller.js';
+import Controller from './controller/Controller.js';
 
 let controller = new Controller();
 

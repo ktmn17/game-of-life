@@ -3,9 +3,9 @@ import style from '../style.styl';
 
 document.body.innerHTML = pug();
 
-import Controller from '../controller/controller.js';
-import View from '../view/view.js';
-import Model from '../model/gameScreen.js';
+import Controller from '../controller/Controller.js';
+import View from '../view/View.js';
+import Model from '../model/GameScreen.js';
 
 describe('controller', function() {
   let controller = new Controller();

@@ -1,4 +1,4 @@
-import Cell from '../model/cell.js';
+import Cell from '../model/Cell.js';
 
 describe('model cell', function () {
 

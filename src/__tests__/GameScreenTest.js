@@ -1,4 +1,4 @@
-import Model from '../model/gameScreen.js';
+import Model from '../model/GameScreen.js';
 
 describe('model gameScreen', function() {
   let model = new Model();

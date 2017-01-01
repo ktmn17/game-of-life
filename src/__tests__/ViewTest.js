@@ -1,6 +1,6 @@
-import View from '../view/view.js';
-import GameScreen from '../model/gameScreen.js';
-import Cell from '../model/cell.js';
+import View from '../view/View.js';
+import GameScreen from '../model/GameScreen.js';
+import Cell from '../model/Cell.js';
 
 import pug from '../main.pug';
 import style from '../style.styl';

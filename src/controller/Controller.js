@@ -1,5 +1,5 @@
-import View from '../view/view.js';
-import Model from '../model/gameScreen.js';
+import View from '../view/View.js';
+import Model from '../model/GameScreen.js';
 
 export default class Controller {
   constructor() {
@@ -47,7 +47,6 @@ export default class Controller {
   clearHandler() {
     this.clear.onclick = () => {
       this.pauseGame();
-
       this.drawInitialCells();
     };
   }
@@ -57,7 +56,6 @@ export default class Controller {
     clearInterval(this.timerId);
 
     this.drawUpdateCells();
-
     this.view.changePlayButton();
     this.pauseHandler();
 
