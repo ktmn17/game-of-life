@@ -1,54 +1,34 @@
-import View from '../view/View.js';
-import Model from '../model/GameScreen.js';
+import View from '../view/View';
+import Model from '../model/GameScreen';
 
 export default class Controller {
   constructor() {
     this.view = new View();
     this.model = new Model();
 
-    this.length = this.view.length;
-    this.play = this.view.play;
-    this.pause = this.view.pause;
-    this.clear = this.view.clear;
+    this.lengthInput = this.view.length;
+    this.playButton = this.view.play;
+    this.clearButton = this.view.clear;
 
-    this.timerId;
+    this.timerId = 0;
   }
 
   setUpGame() {
     this.drawInitialCells();
 
-    this.lengthHandler();
-    this.playHandler();
-    this.clearHandler();
+    this.lengthInput.onblur = () => this.changeNumbersofCells();
+    this.playButton.onclick = () => this.toggleGameCondition();
+    this.clearButton.onclick = () => this.clearGame();
   }
 
-  lengthHandler() {
-    this.length.onblur = () => {
-      this.pauseGame();
-
-      this.length.value <= 40 ? true : this.length.value = 40;
-
-      this.drawInitialCells();
-    };
+  changeNumbersofCells() {
+    this.lengthInput.value = this.model.restrictMaxlength(this.lengthInput.value);
+    this.clearGame();
   }
 
-  playHandler() {
-    this.play.onclick = () => {
-      this.startGame();
-    };
-  }
-
-  pauseHandler() {
-    this.play.onclick = () => {
-      this.pauseGame();
-    };
-  }
-
-  clearHandler() {
-    this.clear.onclick = () => {
-      this.pauseGame();
-      this.drawInitialCells();
-    };
+  toggleGameCondition() {
+    if (!this.model.gameCondition) this.startGame();
+    else this.pauseGame();
   }
 
   startGame() {
@@ -57,26 +37,28 @@ export default class Controller {
 
     this.drawUpdateCells();
     this.view.changePlayButton();
-    this.pauseHandler();
 
-    this.timerId = setInterval( () => {
+    this.timerId = setInterval(() => {
       this.drawUpdateCells();
-
     }, this.model.delay);
   }
 
   pauseGame() {
     if (this.model.gameCondition) {
       this.view.changePlayButton();
-      this.playHandler();
     }
 
     this.model.gameCondition = false;
     clearInterval(this.timerId);
   }
 
+  clearGame() {
+    this.pauseGame();
+    this.drawInitialCells();
+  }
+
   drawInitialCells() {
-    this.model.createCells(this.length.value);
+    this.model.createCells(this.lengthInput.value);
     this.view.draw(this.model.cells);
   }
 
