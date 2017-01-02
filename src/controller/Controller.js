@@ -14,16 +14,11 @@ export default class Controller {
   }
 
   setUpGame() {
-    this.drawInitialCells();
+    this.setBeginGame();
 
-    this.lengthInput.onblur = () => this.changeNumbersofCells();
+    this.lengthInput.onblur = () => this.setBeginGame();
     this.playButton.onclick = () => this.toggleGameCondition();
-    this.clearButton.onclick = () => this.clearGame();
-  }
-
-  changeNumbersofCells() {
-    this.lengthInput.value = this.model.restrictMaxlength(this.lengthInput.value);
-    this.clearGame();
+    this.clearButton.onclick = () => this.setBeginGame();
   }
 
   toggleGameCondition() {
@@ -52,12 +47,13 @@ export default class Controller {
     clearInterval(this.timerId);
   }
 
-  clearGame() {
-    this.pauseGame();
-    this.drawInitialCells();
-  }
+  setBeginGame() {
+    if (this.model.gameCondition) {
+      this.pauseGame();
+    }
 
-  drawInitialCells() {
+    this.lengthInput.value = this.model.restrictMaxlength(this.lengthInput.value);
+
     this.model.createCells(this.lengthInput.value);
     this.view.draw(this.model.cells);
   }
