@@ -45,18 +45,18 @@ describe('model gameScreen', function() {
     cells[3][2].setAlive();
 
     it('return the amount of neighbors with 2 alive condition', function() {
-      let countTrue = model.checkNeighbors(cells, 1, 2);
-      assert.equal( countTrue, 2, 'the amount of the alive neighbors doesnt right of the cell with 2 alive neighbors' );
+      let aliveNeighbors = model.checkNeighbors(cells, 1, 2);
+      assert.equal( aliveNeighbors, 2, 'the amount of the alive neighbors doesnt right of the cell with 2 alive neighbors' );
     });
 
     it('return the amount of neighbors with 3 alive condition', function() {
-      let countTrue = model.checkNeighbors(cells, 2, 2);
-      assert.equal( countTrue, 3, 'the amount of the alive neighbors doesnt right of the cell with 3 alive neighbors' );
+      let aliveNeighbors = model.checkNeighbors(cells, 2, 2);
+      assert.equal( aliveNeighbors, 3, 'the amount of the alive neighbors doesnt right of the cell with 3 alive neighbors' );
     });
 
     it('return the amount of neighbors with 0 alive condition', function() {
-      let countTrue = model.checkNeighbors(cells, 4, 4);
-      assert.equal( countTrue, 0, 'the amount of the alive neighbors doesnt right of the cell with 0 alive neighbors' );
+      let aliveNeighbors = model.checkNeighbors(cells, 4, 4);
+      assert.equal( aliveNeighbors, 0, 'the amount of the alive neighbors doesnt right of the cell with 0 alive neighbors' );
     });
   });
 

@@ -30,12 +30,12 @@ export default class Model {
         let newCell = new Cell();
         newCell.condition = cell.condition;
 
-        let countTrue = this.checkNeighbors(this.cells, i, j);
+        let aliveNeighbors = this.checkNeighbors(this.cells, i, j);
 
         if (cell.condition == cell.dead) {
-          if (countTrue === 3) newCell.setAlive();
+          if (aliveNeighbors === 3) newCell.setAlive();
         } else {
-          if (countTrue < 2 || countTrue > 3) newCell.setDead();
+          if (aliveNeighbors < 2 || aliveNeighbors > 3) newCell.setDead();
         }
 
         return newCell;
@@ -47,17 +47,17 @@ export default class Model {
 
   checkNeighbors(cells, i, j) {
     let neighbors = this.getNeighbors(cells, i, j);
-    let countTrue = 0;
+    let aliveNeighbors = 0;
 
     for (let x = 0; x < neighbors.length; x++) {
       if ( neighbors[x].condition == neighbors[x].dead ) continue;
       else {
-        countTrue++;
-        if (countTrue > 3) return 4;
+        aliveNeighbors++;
+        if (aliveNeighbors > 3) return 4;
       }
     }
 
-    return countTrue;
+    return aliveNeighbors;
   }
 
   getNeighbors(cells, i, j) {
