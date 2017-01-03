@@ -2,10 +2,11 @@ import Cell from './Cell.js';
 
 export default class Model {
   constructor() {
+    this.rows = 0;
     this.cells = [];
-    this.gameCondition = false; // game are in process or not
+    this.isGameActive = false; // game are in process or not
     this.delay = 500;
-    this.maxLength = 40;
+    this.maxRows = 40;
   }
 
   createCells(length) {
@@ -27,11 +28,11 @@ export default class Model {
   updateCells() {
     const newCells = this.cells.map((row, i) => row.map((cell, j) => {
       const newCell = new Cell();
-      newCell.condition = cell.condition;
+      newCell.isAlive = cell.isAlive;
 
       const aliveNeighbors = this.checkNeighbors(this.cells, i, j);
 
-      if (cell.condition == cell.dead) {
+      if (!cell.isAlive) {
         if (aliveNeighbors === 3) newCell.setAlive();
       } else if (aliveNeighbors < 2 || aliveNeighbors > 3) newCell.setDead();
 
@@ -46,8 +47,7 @@ export default class Model {
     let aliveNeighbors = 0;
 
     for (let x = 0; x < neighbors.length; x++) {
-      if (neighbors[x].condition == neighbors[x].dead) continue;
-      else {
+      if (neighbors[x].isAlive)  {
         aliveNeighbors++;
         if (aliveNeighbors > 3) return 4;
       }
@@ -73,7 +73,7 @@ export default class Model {
     return neighbors;
   }
 
-  restrictMaxlength(length) {
-    return (length >= this.maxLength) ? this.maxLength : length;
+  restrictMaxRows(length) {
+    return (length >= this.maxRows) ? this.maxRows : length;
   }
 }

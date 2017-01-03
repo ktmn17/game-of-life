@@ -2,64 +2,70 @@ import View from '../view/View';
 import Model from '../model/GameScreen';
 
 export default class Controller {
-  constructor() {
-    this.view = new View();
+  constructor(rows) {
+    this.view = new View(rows);
     this.model = new Model();
 
-    this.lengthInput = this.view.length;
-    this.playButton = this.view.play;
-    this.clearButton = this.view.clear;
-
-    this.timerId = 0;
+    this.playTimerId = 0;
   }
 
   setUpGame() {
-    this.setBeginGame();
+    const setBeginGame = this.setBeginGame.bind(this);
+    const toggleGameActive = this.toggleGameActive.bind(this);
 
-    this.lengthInput.onblur = () => this.setBeginGame();
-    this.playButton.onclick = () => this.toggleGameCondition();
-    this.clearButton.onclick = () => this.setBeginGame();
+    this.view.on('pageIsReady', setBeginGame);
+    this.view.on('changeRows', setBeginGame);
+    this.view.on('playOrPause', toggleGameActive);
+    this.view.on('clearCells', setBeginGame);
   }
 
-  toggleGameCondition() {
-    if (!this.model.gameCondition) this.startGame();
-    else this.pauseGame();
+  setBeginGame() {
+    if (this.model.isGameActive) {
+      this.pauseGame();
+    }
+
+    this.moveAndUpdateLengthRowsInputValueToModel();
+
+    this.model.createCells(this.model.rows);
+    this.view.draw(this.model.cells);
+  }
+
+  toggleGameActive() {
+    if (this.model.isGameActive) this.pauseGame();
+    else this.startGame();
   }
 
   startGame() {
-    this.model.gameCondition = true;
-    clearInterval(this.timerId);
+    this.model.isGameActive = true;
+
+    clearInterval(this.playTimerId);
 
     this.drawUpdateCells();
     this.view.changePlayButton();
 
-    this.timerId = setInterval(() => {
+    this.playTimerId = setInterval(() => {
       this.drawUpdateCells();
     }, this.model.delay);
   }
 
   pauseGame() {
-    if (this.model.gameCondition) {
+    if (this.model.isGameActive) {
       this.view.changePlayButton();
     }
 
-    this.model.gameCondition = false;
-    clearInterval(this.timerId);
-  }
-
-  setBeginGame() {
-    if (this.model.gameCondition) {
-      this.pauseGame();
-    }
-
-    this.lengthInput.value = this.model.restrictMaxlength(this.lengthInput.value);
-
-    this.model.createCells(this.lengthInput.value);
-    this.view.draw(this.model.cells);
+    this.model.isGameActive = false;
+    clearInterval(this.playTimerId);
   }
 
   drawUpdateCells() {
     this.model.updateCells();
     this.view.draw(this.model.cells);
+  }
+
+  moveAndUpdateLengthRowsInputValueToModel() {
+    this.model.rows = this.view.getLengthRowsInputValue();
+    this.model.rows = this.model.restrictMaxRows(this.model.rows);
+
+    this.view.changeLengthRowsInputValue(this.model.rows);
   }
 }

@@ -1,14 +1,19 @@
+import EventEmitter from 'events';
 import pug from '../main.pug';
 import style from '../style.styl';
 
-export default class View {
-  constructor() {
-    document.body.innerHTML = pug();
+class View extends EventEmitter {
+  constructor(rows) {
+    super();
 
-    this.elem = document.querySelector('.window__game');
-    this.length = document.querySelector('.window__input');
-    this.play = document.querySelector('.window__button_play');
-    this.clear = document.querySelector('.window__button_clear');
+    document.body.innerHTML = pug({ rowsPug: rows });
+
+    this.gameBoard = document.querySelector('.window__game');
+    this.lengthInput = document.querySelector('.window__input');
+    this.playButton = document.querySelector('.window__button_play');
+    this.clearButton = document.querySelector('.window__button_clear');
+
+    this.handlers();
   }
 
   draw(cells) {
@@ -18,50 +23,68 @@ export default class View {
       const row = document.createElement('div');
       row.classList.add('window__row');
 
-      this.elem.appendChild(row);
+      this.gameBoard.appendChild(row);
 
       for (let j = 0; j < cells[i].length; j++) {
         const cell = cells[i][j];
-        const elem = this.createElemCell();
+        const elemCell = this.createElemCell();
 
-        elem.onclick = () => {
-          if (cell.condition == cell.alive) {
-            this.makeDead(cell, elem);
-          } else this.makeAlive(cell, elem);
+        elemCell.onclick = () => {
+          if (cell.isAlive) {
+            this.makeDead(cell, elemCell);
+          } else this.makeAlive(cell, elemCell);
         };
 
-        if (cell.condition == cell.alive) this.makeAlive(cell, elem);
-        if (cell.condition == cell.dead) this.makeDead(cell, elem);
+        if (cell.isAlive) this.makeAlive(cell, elemCell);
+        else this.makeDead(cell, elemCell);
 
-        row.appendChild(elem);
+        row.appendChild(elemCell);
       }
     }
   }
 
-  createElemCell() {
-    const elem = document.createElement('div');
-    elem.classList.add('window__cell');
-    return elem;
-  }
-
   removeChildren() {
-    while (this.elem.children.length) {
-      this.elem.removeChild(this.elem.children[0]);
+    while (this.gameBoard.children.length) {
+      this.gameBoard.removeChild(this.gameBoard.children[0]);
     }
   }
 
-  makeAlive(cell, elem) {
-    cell.setAlive();
-    elem.classList.add('window__cell_enable');
+  createElemCell() {
+    const elemCell = document.createElement('div');
+    elemCell.classList.add('window__cell');
+    return elemCell;
   }
 
-  makeDead(cell, elem) {
+  makeAlive(cell, elemCell) {
+    cell.setAlive();
+    elemCell.classList.add('window__cell_enable');
+  }
+
+  makeDead(cell, elemCell) {
     cell.setDead();
-    elem.classList.remove('window__cell_enable');
+    elemCell.classList.remove('window__cell_enable');
   }
 
   changePlayButton() {
-    if (this.play.textContent == 'Play') this.play.textContent = 'Pause';
-    else this.play.textContent = 'Play';
+    if (this.playButton.textContent === 'Play') this.playButton.textContent = 'Pause';
+    else this.playButton.textContent = 'Play';
+  }
+
+  getLengthRowsInputValue() {
+    return this.lengthInput.value;
+  }
+
+  changeLengthRowsInputValue(value) {
+    this.lengthInput.value = value;
+  }
+
+  handlers() {
+    document.addEventListener('DOMContentLoaded', () => this.emit('pageIsReady'));
+
+    this.lengthInput.onblur = () => this.emit('changeRows');
+    this.playButton.onclick = () => this.emit('playOrPause');
+    this.clearButton.onclick = () => this.emit('clearCells');
   }
 }
+
+export default View;

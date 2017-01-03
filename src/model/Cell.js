@@ -1,15 +1,15 @@
 export default class Cell {
   constructor() {
-    this.condition = false;
+    this.isAlive = false;
     this.alive = true;
     this.dead = false;
   }
 
   setAlive() {
-    this.condition = this.alive;
+    this.isAlive = this.alive;
   }
 
   setDead() {
-    this.condition = this.dead;
+    this.isAlive = this.dead;
   }
 }
