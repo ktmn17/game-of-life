@@ -2,8 +2,8 @@ import View from '../view/View';
 import Model from '../model/GameScreen';
 
 export default class Controller {
-  constructor(rows) {
-    this.view = new View(rows);
+  constructor(numberOfRows) {
+    this.view = new View(numberOfRows);
     this.model = new Model();
 
     this.playTimerId = 0;
@@ -24,9 +24,10 @@ export default class Controller {
       this.pauseGame();
     }
 
-    this.moveAndUpdateLengthRowsInputValueToModel();
+    this.moveAndUpdateNumberOfRowsInputValueToModel();
+    this.view.changeNumberOfRowsInputValue(this.model.numberOfRows);
 
-    this.model.createCells(this.model.rows);
+    this.model.createCells(this.model.numberOfRows);
     this.view.draw(this.model.cells);
   }
 
@@ -54,6 +55,7 @@ export default class Controller {
     }
 
     this.model.isGameActive = false;
+
     clearInterval(this.playTimerId);
   }
 
@@ -62,10 +64,8 @@ export default class Controller {
     this.view.draw(this.model.cells);
   }
 
-  moveAndUpdateLengthRowsInputValueToModel() {
-    this.model.rows = this.view.getLengthRowsInputValue();
-    this.model.rows = this.model.restrictMaxRows(this.model.rows);
-
-    this.view.changeLengthRowsInputValue(this.model.rows);
+  moveAndUpdateNumberOfRowsInputValueToModel() {
+    this.model.numberOfRows = this.view.getNumberOfRowsInputValue();
+    this.model.numberOfRows = this.model.restrictMaxRows(this.model.numberOfRows);
   }
 }

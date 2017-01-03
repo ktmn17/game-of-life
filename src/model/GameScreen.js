@@ -2,7 +2,7 @@ import Cell from './Cell.js';
 
 export default class Model {
   constructor() {
-    this.rows = 0;
+    this.numberOfRows = 0;
     this.cells = [];
     this.isGameActive = false; // game are in process or not
     this.delay = 500;

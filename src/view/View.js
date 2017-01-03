@@ -3,13 +3,13 @@ import pug from '../main.pug';
 import style from '../style.styl';
 
 class View extends EventEmitter {
-  constructor(rows) {
+  constructor(numberOfRows) {
     super();
 
-    document.body.innerHTML = pug({ rowsPug: rows });
+    document.body.innerHTML = pug({ numberOfRowsPug: numberOfRows });
 
     this.gameBoard = document.querySelector('.window__game');
-    this.lengthInput = document.querySelector('.window__input');
+    this.numberOfRowsInput = document.querySelector('.window__input');
     this.playButton = document.querySelector('.window__button_play');
     this.clearButton = document.querySelector('.window__button_clear');
 
@@ -70,18 +70,18 @@ class View extends EventEmitter {
     else this.playButton.textContent = 'Play';
   }
 
-  getLengthRowsInputValue() {
-    return this.lengthInput.value;
+  getNumberOfRowsInputValue() {
+    return this.numberOfRowsInput.value;
   }
 
-  changeLengthRowsInputValue(value) {
-    this.lengthInput.value = value;
+  changeNumberOfRowsInputValue(value) {
+    this.numberOfRowsInput.value = value;
   }
 
   handlers() {
     document.addEventListener('DOMContentLoaded', () => this.emit('pageIsReady'));
 
-    this.lengthInput.onblur = () => this.emit('changeRows');
+    this.numberOfRowsInput.onblur = () => this.emit('changeRows');
     this.playButton.onclick = () => this.emit('playOrPause');
     this.clearButton.onclick = () => this.emit('clearCells');
   }
