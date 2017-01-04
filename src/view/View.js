@@ -13,56 +13,26 @@ class View extends EventEmitter {
     this.playButton = document.querySelector('.window__button_play');
     this.clearButton = document.querySelector('.window__button_clear');
 
-    this.handlers();
+    this.initialHandlers();
   }
 
   draw(cells) {
     this.removeChildren();
 
-    for (let i = 0; i < cells.length; i++) {
-      const row = document.createElement('div');
-      row.classList.add('window__row');
+    cells.forEach((row) => {
+      const elemRow = View.createElemRow();
+      this.gameBoard.appendChild(elemRow);
 
-      this.gameBoard.appendChild(row);
+      row.forEach((modelCell) => {
+        const elemCell = View.createElemCell();
+        elemCell.onclick = () => this.toogleCell(modelCell, elemCell);
 
-      for (let j = 0; j < cells[i].length; j++) {
-        const cell = cells[i][j];
-        const elemCell = this.createElemCell();
+        if (modelCell.isAlive) this.makeAlive(modelCell, elemCell);
+        else this.makeDead(modelCell, elemCell);
 
-        elemCell.onclick = () => {
-          if (cell.isAlive) {
-            this.makeDead(cell, elemCell);
-          } else this.makeAlive(cell, elemCell);
-        };
-
-        if (cell.isAlive) this.makeAlive(cell, elemCell);
-        else this.makeDead(cell, elemCell);
-
-        row.appendChild(elemCell);
-      }
-    }
-  }
-
-  removeChildren() {
-    while (this.gameBoard.children.length) {
-      this.gameBoard.removeChild(this.gameBoard.children[0]);
-    }
-  }
-
-  createElemCell() {
-    const elemCell = document.createElement('div');
-    elemCell.classList.add('window__cell');
-    return elemCell;
-  }
-
-  makeAlive(cell, elemCell) {
-    cell.setAlive();
-    elemCell.classList.add('window__cell_enable');
-  }
-
-  makeDead(cell, elemCell) {
-    cell.setDead();
-    elemCell.classList.remove('window__cell_enable');
+        elemRow.appendChild(elemCell);
+      });
+    });
   }
 
   changePlayButton(isGameActive) {
@@ -78,12 +48,45 @@ class View extends EventEmitter {
     this.numberOfRowsInput.value = value;
   }
 
-  handlers() {
+  removeChildren() {
+    while (this.gameBoard.children.length) {
+      this.gameBoard.removeChild(this.gameBoard.children[0]);
+    }
+  }
+
+  initialHandlers() {
     document.addEventListener('DOMContentLoaded', () => this.emit('pageIsReady'));
 
     this.numberOfRowsInput.onblur = () => this.emit('changeRows');
     this.playButton.onclick = () => this.emit('playOrPause');
     this.clearButton.onclick = () => this.emit('clearCells');
+  }
+
+  toogleCell(modelCell, elemCell) {
+    if (modelCell.isAlive) this.makeDead(modelCell, elemCell);
+    else this.makeAlive(modelCell, elemCell);
+  }
+
+  makeAlive(modelCell, elemCell) {
+    this.emit('setModelCellAlive', modelCell);
+    elemCell.classList.add('window__cell_enable');
+  }
+
+  makeDead(modelCell, elemCell) {
+    this.emit('setModelCellDead', modelCell);
+    elemCell.classList.remove('window__cell_enable');
+  }
+
+  static createElemRow() {
+    const elemRow = document.createElement('div');
+    elemRow.classList.add('window__row');
+    return elemRow;
+  }
+
+  static createElemCell() {
+    const elemCell = document.createElement('div');
+    elemCell.classList.add('window__cell');
+    return elemCell;
   }
 }
 

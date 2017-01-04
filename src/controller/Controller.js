@@ -17,10 +17,12 @@ export default class Controller {
     this.view.on('changeRows', setBeginGame);
     this.view.on('playOrPause', toggleGameActive);
     this.view.on('clearCells', setBeginGame);
+    this.view.on('setModelCellAlive', modelCell => modelCell.setAlive());
+    this.view.on('setModelCellDead', modelCell => modelCell.setDead());
   }
 
   setBeginGame() {
-    if (this.model.isGameActive) {
+    if (this.model.gameIsActive) {
       this.pauseGame();
     }
 
@@ -32,17 +34,17 @@ export default class Controller {
   }
 
   toggleGameActive() {
-    if (this.model.isGameActive) this.pauseGame();
+    if (this.model.gameIsActive) this.pauseGame();
     else this.startGame();
   }
 
   startGame() {
-    this.model.isGameActive = true;
+    this.model.setGameActive(true);
 
     clearInterval(this.playTimerId);
 
     this.drawUpdateCells();
-    this.view.changePlayButton(this.model.isGameActive);
+    this.view.changePlayButton(this.model.gameIsActive);
 
     this.playTimerId = setInterval(() => {
       this.drawUpdateCells();
@@ -50,8 +52,8 @@ export default class Controller {
   }
 
   pauseGame() {
-    this.model.isGameActive = false;
-    this.view.changePlayButton(this.model.isGameActive);
+    this.model.setGameActive(false);
+    this.view.changePlayButton(this.model.gameIsActive);
 
     clearInterval(this.playTimerId);
   }

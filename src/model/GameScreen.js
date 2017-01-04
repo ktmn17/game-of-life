@@ -4,7 +4,7 @@ export default class Model {
   constructor() {
     this.numberOfRows = 0;
     this.cells = [];
-    this.isGameActive = false; // game are in process or not
+    this.gameIsActive = false; // game are in process or not
     this.delay = 500;
     this.maxRows = 40;
   }
@@ -30,7 +30,7 @@ export default class Model {
       const newCell = new Cell();
       newCell.isAlive = cell.isAlive;
 
-      const aliveNeighbors = this.checkNeighbors(this.cells, i, j);
+      const aliveNeighbors = this.checkNeighbors(i, j);
 
       if (!cell.isAlive) {
         if (aliveNeighbors === 3) newCell.setAlive();
@@ -42,13 +42,13 @@ export default class Model {
     this.cells = newCells;
   }
 
-  checkNeighbors(cells, i, j) {
-    const neighbors = this.getNeighbors(cells, i, j);
+  checkNeighbors(i, j) {
+    const neighbors = this.getNeighbors(i, j);
     let aliveNeighbors = 0;
 
     for (let x = 0; x < neighbors.length; x++) {
-      if (neighbors[x].isAlive)  {
-        aliveNeighbors++;
+      if (neighbors[x].isAlive) {
+        aliveNeighbors += 1;
         if (aliveNeighbors > 3) return 4;
       }
     }
@@ -56,21 +56,25 @@ export default class Model {
     return aliveNeighbors;
   }
 
-  getNeighbors(cells, i, j) {
+  getNeighbors(i, j) {
     const neighbors = [];
 
-    first: for (let x = -1; x <= 1; x++) {
-      if (i + x < 0 || i + x > cells.length - 1) continue first; // row doesnt exist
+    for (let x = -1; x <= 1; x++) {
+      if (i + x < 0 || i + x > this.cells.length - 1) continue; // row doesnt exist
 
-      second: for (let y = -1; y <= 1; y++) {
-        if (j + y < 0 || j + y > cells[i].length - 1) continue second; // cell doesnt exist
-        if (x == 0 && y == 0) continue second; // cell itself
+      for (let y = -1; y <= 1; y++) {
+        if (j + y < 0 || j + y > this.cells[i].length - 1) continue; // cell doesnt exist
+        if (x === 0 && y === 0) continue; // cell itself
 
-        neighbors.push(cells[i + x][j + y]);
+        neighbors.push(this.cells[i + x][j + y]);
       }
     }
 
     return neighbors;
+  }
+
+  setGameActive(gameIsActive) {
+    this.gameIsActive = gameIsActive;
   }
 
   restrictMaxRows(length) {
