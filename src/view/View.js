@@ -65,8 +65,8 @@ class View extends EventEmitter {
     elemCell.classList.remove('window__cell_enable');
   }
 
-  changePlayButton(boolean) {
-    if (boolean) this.playButton.textContent = 'Pause';
+  changePlayButton(isGameActive) {
+    if (isGameActive) this.playButton.textContent = 'Pause';
     else this.playButton.textContent = 'Play';
   }
 
