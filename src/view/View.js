@@ -6,7 +6,7 @@ class View extends EventEmitter {
   constructor(numberOfRows) {
     super();
 
-    document.body.innerHTML = pug({ numberOfRowsPug: numberOfRows });
+    document.body.innerHTML = pug({ numberOfRows });
 
     this.gameBoard = document.querySelector('.window__game');
     this.numberOfRowsInput = document.querySelector('.window__input');
@@ -65,8 +65,8 @@ class View extends EventEmitter {
     elemCell.classList.remove('window__cell_enable');
   }
 
-  changePlayButton() {
-    if (this.playButton.textContent === 'Play') this.playButton.textContent = 'Pause';
+  changePlayButton(boolean) {
+    if (boolean) this.playButton.textContent = 'Pause';
     else this.playButton.textContent = 'Play';
   }
 

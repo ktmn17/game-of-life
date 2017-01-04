@@ -42,7 +42,7 @@ export default class Controller {
     clearInterval(this.playTimerId);
 
     this.drawUpdateCells();
-    this.view.changePlayButton();
+    this.view.changePlayButton(this.model.isGameActive);
 
     this.playTimerId = setInterval(() => {
       this.drawUpdateCells();
@@ -50,11 +50,8 @@ export default class Controller {
   }
 
   pauseGame() {
-    if (this.model.isGameActive) {
-      this.view.changePlayButton();
-    }
-
     this.model.isGameActive = false;
+    this.view.changePlayButton(this.model.isGameActive);
 
     clearInterval(this.playTimerId);
   }
