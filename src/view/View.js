@@ -17,7 +17,7 @@ class View extends EventEmitter {
   }
 
   draw(cells) {
-    this.removeChildren();
+    this.removeElemCells();
 
     cells.forEach((row) => {
       const elemRow = View.createElemRow();
@@ -33,11 +33,15 @@ class View extends EventEmitter {
         elemRow.appendChild(elemCell);
       });
     });
+
+    return this;
   }
 
   changePlayButton(isGameActive) {
     if (isGameActive) this.playButton.textContent = 'Pause';
     else this.playButton.textContent = 'Play';
+
+    return this;
   }
 
   getNumberOfRowsInputValue() {
@@ -46,12 +50,16 @@ class View extends EventEmitter {
 
   changeNumberOfRowsInputValue(value) {
     this.numberOfRowsInput.value = value;
+
+    return this;
   }
 
-  removeChildren() {
+  removeElemCells() {
     while (this.gameBoard.children.length) {
       this.gameBoard.removeChild(this.gameBoard.children[0]);
     }
+
+    return this;
   }
 
   initialHandlers() {
@@ -60,32 +68,42 @@ class View extends EventEmitter {
     this.numberOfRowsInput.onblur = () => this.emit('changeRows');
     this.playButton.onclick = () => this.emit('playOrPause');
     this.clearButton.onclick = () => this.emit('clearCells');
+
+    return this;
   }
 
   toogleCell(modelCell, elemCell) {
     if (modelCell.isAlive) this.makeDead(modelCell, elemCell);
     else this.makeAlive(modelCell, elemCell);
+
+    return this;
   }
 
   makeAlive(modelCell, elemCell) {
     this.emit('setModelCellAlive', modelCell);
     elemCell.classList.add('window__cell_enable');
+
+    return this;
   }
 
   makeDead(modelCell, elemCell) {
     this.emit('setModelCellDead', modelCell);
     elemCell.classList.remove('window__cell_enable');
+
+    return this;
   }
 
   static createElemRow() {
     const elemRow = document.createElement('div');
     elemRow.classList.add('window__row');
+
     return elemRow;
   }
 
   static createElemCell() {
     const elemCell = document.createElement('div');
     elemCell.classList.add('window__cell');
+
     return elemCell;
   }
 }

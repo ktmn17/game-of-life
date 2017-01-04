@@ -31,11 +31,15 @@ export default class Controller {
 
     this.model.createCells(this.model.numberOfRows);
     this.view.draw(this.model.cells);
+
+    return this;
   }
 
   toggleGameActive() {
     if (this.model.gameIsActive) this.pauseGame();
     else this.startGame();
+
+    return this;
   }
 
   startGame() {
@@ -49,6 +53,8 @@ export default class Controller {
     this.playTimerId = setInterval(() => {
       this.drawUpdateCells();
     }, this.model.delay);
+
+    return this;
   }
 
   pauseGame() {
@@ -56,15 +62,21 @@ export default class Controller {
     this.view.changePlayButton(this.model.gameIsActive);
 
     clearInterval(this.playTimerId);
+
+    return this;
   }
 
   drawUpdateCells() {
     this.model.updateCells();
     this.view.draw(this.model.cells);
+
+    return this;
   }
 
   moveAndUpdateNumberOfRowsInputValueToModel() {
     this.model.numberOfRows = this.view.getNumberOfRowsInputValue();
-    this.model.numberOfRows = this.model.restrictMaxRows(this.model.numberOfRows);
+    this.model.numberOfRows = this.model.getRestrictMaxRows(this.model.numberOfRows);
+
+    return this;
   }
 }

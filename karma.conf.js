@@ -1,44 +1,40 @@
-'use strict';
-
-let webpackConfig = require('./webpack.config.js');
+const webpackConfig = require('./webpack.config.js');
 
 module.exports = function (config) {
+  config.set({
+    basePath: 'src/__tests__/',
 
-    config.set({
+    browsers: ['PhantomJS'],
 
-        basePath: 'src/__tests__/',
+    frameworks: ['mocha', 'sinon', 'chai'],
 
-        browsers: ['PhantomJS'],
+    files: [
+      '*.js',
+    ],
 
-        frameworks: ['mocha', 'sinon', 'chai'],
+    reporters: ['mocha'],
 
-        files: [
-            '*.js'
-        ],
+    preprocessors: {
+      '*.js': ['webpack'],
+    },
 
-        reporters: ['mocha'],
-
-        preprocessors: {
-            '*.js': ['webpack']
+    webpack: {
+      module: webpackConfig.module,
+      resolve: {
+        alias: {
+          sinon: 'sinon/pkg/sinon.js',
         },
+      },
+    },
 
-        webpack: {
-            module: webpackConfig.module,
-            resolve: {
-                alias: {
-                    sinon: 'sinon/pkg/sinon.js',
-                },
-            }
-        },
-
-        plugins: [
-            require('karma-webpack'),
-            require('karma-mocha'),
-            require('karma-chai'),
-            require('karma-sinon'),
-            require('karma-sinon-chai'),
-            require('karma-mocha-reporter'),
-            require('karma-phantomjs-launcher')
-        ]
-    });
+    plugins: [
+      require('karma-webpack'),
+      require('karma-mocha'),
+      require('karma-chai'),
+      require('karma-sinon'),
+      require('karma-sinon-chai'),
+      require('karma-mocha-reporter'),
+      require('karma-phantomjs-launcher'),
+    ],
+  });
 };

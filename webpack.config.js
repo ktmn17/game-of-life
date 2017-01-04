@@ -5,7 +5,7 @@ module.exports = {
 
   output: {
     path: './dist',
-    filename: '[name].js'
+    filename: '[name].js',
   },
 
   watch: true,
@@ -16,19 +16,19 @@ module.exports = {
       exclude: /node_modules/,
       loader: 'babel-loader',
       query: {
-        presets: ['es2015']
-      }
+        presets: ['es2015'],
+      },
     }, {
       test: /.styl$/,
-      loader: 'style-loader!css-loader!stylus-loader'
+      loader: 'style-loader!css-loader!stylus-loader',
     }, {
       test: /.pug$/,
-      loader: 'pug-loader'
-    }]
+      loader: 'pug-loader',
+    }],
   },
 
   plugins: [new HtmlWebpackPlugin({
-    title: 'Life'
-    })
-  ]
-}
+    title: 'Life',
+  }),
+  ],
+};
