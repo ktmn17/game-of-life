@@ -2,15 +2,16 @@ import Cell from './Cell';
 
 export default class Model {
   constructor() {
-    this.numberOfRows = 0;
+    this.numOfRows = 0;
+    this.maxRows = 40;
     this.cells = [];
     this.gameIsActive = false;
     this.delay = 500;
-    this.maxRows = 40;
   }
 
-  createCells(length) {
+  setInitialCells() {
     const cells = [];
+    const length = this.numOfRows;
 
     for (let i = 0; i < length; i += 1) {
       const cellsRow = [];
@@ -27,16 +28,16 @@ export default class Model {
     return this;
   }
 
-  updateCells() {
+  setNextStepCells() {
     const newCells = this.cells.map((row, i) => row.map((cell, j) => {
       const newCell = new Cell();
       newCell.isAlive = cell.isAlive;
 
       const aliveNeighbors = this.getAliveNeighbors(i, j);
 
-      if (!cell.isAlive) {
-        if (aliveNeighbors === 3) newCell.setAlive();
-      } else if (aliveNeighbors < 2 || aliveNeighbors > 3) newCell.setDead();
+      if (cell.isAlive) {
+        if (aliveNeighbors < 2 || aliveNeighbors > 3) newCell.setDead();
+      } else if (aliveNeighbors === 3) newCell.setAlive();
 
       return newCell;
     }));
@@ -58,23 +59,23 @@ export default class Model {
   }
 
   getNeighbors(i, j) {
-    // i - y coord of cell on the board, j - x coord of cell on the board
+    // i - y coord of cell in the cells, j - x coord of cell in the cells
     const coordOfNeighbors = [
-      { x: j - 1, y: i + 1 },
-      { x: j,     y: i + 1 },
-      { x: j + 1, y: i + 1 },
-      { x: j - 1, y: i },
-      { x: j + 1, y: i },
       { x: j - 1, y: i - 1 },
       { x: j,     y: i - 1 },
       { x: j + 1, y: i - 1 },
+      { x: j - 1, y: i },
+      { x: j + 1, y: i },
+      { x: j - 1, y: i + 1 },
+      { x: j,     y: i + 1 },
+      { x: j + 1, y: i + 1 },
     ];
     const neighbors = [];
 
     coordOfNeighbors.forEach((coordOfNeighbor) => {
       const x = coordOfNeighbor.x;
       const y = coordOfNeighbor.y;
-      const lastRow = this.numberOfRows - 1;
+      const lastRow = this.numOfRows - 1;
 
       if (x >= 0 && y >= 0) {
         if (x <= lastRow && y <= lastRow) {
@@ -92,7 +93,8 @@ export default class Model {
     return this;
   }
 
-  getRestrictMaxRows(length) {
-    return (length >= this.maxRows) ? this.maxRows : length;
+  setNumOfRows(numOfRows) {
+    if (numOfRows >= this.maxRows) this.numOfRows = this.maxRows;
+    else this.numOfRows = numOfRows;
   }
 }

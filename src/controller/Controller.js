@@ -26,11 +26,9 @@ export default class Controller {
       this.pauseGame();
     }
 
-    this.moveAndUpdateNumberOfRowsInputValueToModel();
-    this.view.changeNumberOfRowsInputValue(this.model.numberOfRows);
-
-    this.model.createCells(this.model.numberOfRows);
-    this.view.draw(this.model.cells);
+    this.transmitNumOfRowsInputValueToModel();
+    this.view.changeNumberOfRowsInputValue(this.model.numOfRows);
+    this.drawInitialCells();
 
     return this;
   }
@@ -43,39 +41,45 @@ export default class Controller {
   }
 
   startGame() {
-    this.model.setGameActive(true);
-
     clearInterval(this.playTimerId);
 
-    this.drawUpdateCells();
+    this.model.setGameActive(true);
+    this.drawNextStepCells();
     this.view.changePlayButton(this.model.gameIsActive);
 
     this.playTimerId = setInterval(() => {
-      this.drawUpdateCells();
+      this.drawNextStepCells();
     }, this.model.delay);
 
     return this;
   }
 
   pauseGame() {
+    clearInterval(this.playTimerId);
+
     this.model.setGameActive(false);
     this.view.changePlayButton(this.model.gameIsActive);
-
-    clearInterval(this.playTimerId);
 
     return this;
   }
 
-  drawUpdateCells() {
-    this.model.updateCells();
+  drawInitialCells() {
+    this.model.setInitialCells();
     this.view.draw(this.model.cells);
 
     return this;
   }
 
-  moveAndUpdateNumberOfRowsInputValueToModel() {
-    this.model.numberOfRows = this.view.getNumberOfRowsInputValue();
-    this.model.numberOfRows = this.model.getRestrictMaxRows(this.model.numberOfRows);
+  drawNextStepCells() {
+    this.model.setNextStepCells();
+    this.view.draw(this.model.cells);
+
+    return this;
+  }
+
+  transmitNumOfRowsInputValueToModel() {
+    const numOfRows = this.view.getNumberOfRowsInputValue();
+    this.model.setNumOfRows(numOfRows);
 
     return this;
   }
