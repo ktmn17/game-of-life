@@ -8,7 +8,7 @@ describe('Model Cell', function () {
   });
 
   it('created cell has dead status', function () {
-    assert.equal(cell.isAlive, false, 'created cell doesnt ahve dead status');
+    assert.equal(cell.isAlive, false, 'created cell doesnt have dead status');
   });
 
   it('set cell to alive', function () {
@@ -18,6 +18,6 @@ describe('Model Cell', function () {
 
   it('set cell to dead', function () {
     cell.setDead();
-    assert.equal(cell.isAlive, false, 'doesnt set cell to alive');
+    assert.equal(cell.isAlive, false, 'doesnt set cell to dead');
   });
 });
