@@ -14,7 +14,7 @@ describe('model gameScreen', function() {
     model.numOfRows = 3;
     model.maxRows = 5;
     model.gameIsActive = false;
-  }
+  };
 
   describe('setInitialCells', function() {
     describe('set initial cells 3x3', function () {
@@ -37,8 +37,7 @@ describe('model gameScreen', function() {
       it('cells has 3 cells in last row', () => {
         assert.equal(model.cells[2].length, 3, 'model.cell doesnt have 3 cells in last row');
       });
-
-    })
+    });
 
     it('return this', () => {
       assert.equal(model.setInitialCells(), model, 'doesnt return this');
@@ -50,21 +49,21 @@ describe('model gameScreen', function() {
       before(function () {
         setInitialModel();
 
-        const stubAliveNeighb = sinon.stub(model, 'getAliveNeighbors');
+        const stubGetAliveNeighbors = sinon.stub(model, 'getAliveNeighbors');
 
-        stubAliveNeighb.onCall(0).returns(2);
-        stubAliveNeighb.onCall(1).returns(1);
-        stubAliveNeighb.onCall(2).returns(2);
-        stubAliveNeighb.onCall(3).returns(3);
-        stubAliveNeighb.onCall(4).returns(2);
-        stubAliveNeighb.onCall(5).returns(3);
-        stubAliveNeighb.onCall(6).returns(2);
-        stubAliveNeighb.onCall(7).returns(1);
-        stubAliveNeighb.onCall(8).returns(2);
+        stubGetAliveNeighbors.onCall(0).returns(2);
+        stubGetAliveNeighbors.onCall(1).returns(1);
+        stubGetAliveNeighbors.onCall(2).returns(2);
+        stubGetAliveNeighbors.onCall(3).returns(3);
+        stubGetAliveNeighbors.onCall(4).returns(2);
+        stubGetAliveNeighbors.onCall(5).returns(3);
+        stubGetAliveNeighbors.onCall(6).returns(2);
+        stubGetAliveNeighbors.onCall(7).returns(1);
+        stubGetAliveNeighbors.onCall(8).returns(2);
 
         model.setNextStepCells();
 
-        stubAliveNeighb.restore();
+        stubGetAliveNeighbors.restore();
       });
 
       it('set dead the top cell of the line', function() {
@@ -105,15 +104,15 @@ describe('model gameScreen', function() {
       { isAlive: false },
     ];
 
-    const stubNeighb = sinon.stub(model, 'getNeighbors');
-    stubNeighb.returns(neighb);
+    const stubGetNeighbors = sinon.stub(model, 'getNeighbors');
+    stubGetNeighbors.returns(neighb);
 
     before(function () {
       setInitialModel();
     });
 
     after(function () {
-      stubNeighb.restore();
+      stubGetNeighbors.restore();
     });
 
     it('return 0 of cell with 0 alive neighbors', function() {
