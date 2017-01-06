@@ -1,4 +1,19 @@
 import Model from '../model/GameScreen';
+import * as Cell from '../model/Cell';
+
+Cell.default = class testCell {
+  constructor() {
+    this.isAlive = false;
+  }
+
+  setAlive() {
+    this.isAlive = true;
+  }
+
+  setDead() {
+    this.isAlive = false;
+  }
+};
 
 describe('model gameScreen', function() {
   const model = new Model();
@@ -16,7 +31,7 @@ describe('model gameScreen', function() {
     model.gameIsActive = false;
   };
 
-  describe('setInitialCells', function() {
+  describe('setInitialCells', function () {
     describe('set initial cells 3x3', function () {
       before(function () {
         setInitialModel();
@@ -44,7 +59,7 @@ describe('model gameScreen', function() {
     });
   });
 
-  describe('setNextStepCells', function() {
+  describe('setNextStepCells', function () {
     describe('update vertical line to horizontal', function () {
       before(function () {
         setInitialModel();
@@ -67,32 +82,32 @@ describe('model gameScreen', function() {
       });
 
       it('set dead the top cell of the line', function() {
-        assert.isFalse( model.cells[0][1].isAlive, 'the update line of three cell doesnt right' );
+        assert.isFalse(model.cells[0][1].isAlive, 'the update line of three cell doesnt right');
       });
 
       it('set alive the left cell of the line', function() {
-        assert.isTrue( model.cells[1][0].isAlive, 'the update line of three cell doesnt right' );
+        assert.isTrue(model.cells[1][0].isAlive, 'the update line of three cell doesnt right');
       });
 
       it('retain alive the center cell of the line', function() {
-        assert.isTrue( model.cells[1][1].isAlive, 'the update line of three cell doesnt right' );
+        assert.isTrue(model.cells[1][1].isAlive, 'the update line of three cell doesnt right');
       });
 
-      it('set alive the right cell of the line', function() {
-        assert.isTrue( model.cells[1][2].isAlive, 'the update line of three cell doesnt right' );
+      it('set alive the right cell of the line', function () {
+        assert.isTrue(model.cells[1][2].isAlive, 'the update line of three cell doesnt right');
       });
 
-      it('set dead the bottom cell of the line', function() {
-        assert.isFalse( model.cells[2][1].isAlive, 'the update line of three cell doesnt right' );
+      it('set dead the bottom cell of the line', function () {
+        assert.isFalse(model.cells[2][1].isAlive, 'the update line of three cell doesnt right');
       });
     });
 
     it('return this', () => {
-      assert.equal(model.setNextStepCells(), model, 'doesnt return this')
+      assert.equal(model.setNextStepCells(), model, 'doesnt return this');
     });
   });
 
-  describe('getAliveNeighbors', function() {
+  describe('getAliveNeighbors', function () {
     const neighb = [
       { isAlive: false },
       { isAlive: false },
@@ -115,12 +130,12 @@ describe('model gameScreen', function() {
       stubGetNeighbors.restore();
     });
 
-    it('return 0 of cell with 0 alive neighbors', function() {
+    it('return 0 of cell with 0 alive neighbors', function () {
       const aliveNeighbors = model.getAliveNeighbors();
       assert.equal(aliveNeighbors, 0, 'the amount of the alive neighbors doesnt right of the cell with 2 alive neighbors');
     });
 
-    it('return 2 of cell with 2 alive neighbors', function() {
+    it('return 2 of cell with 2 alive neighbors', function () {
       neighb[3].isAlive = true;
       neighb[6].isAlive = true;
 
@@ -128,7 +143,7 @@ describe('model gameScreen', function() {
       assert.equal(aliveNeighbors, 2, 'the amount of the alive neighbors doesnt right of the cell with 2 alive neighbors');
     });
 
-    it('return 4 of cell with 4 alive neighbors', function() {
+    it('return 4 of cell with 4 alive neighbors', function () {
       neighb[0].isAlive = true;
       neighb[7].isAlive = true;
 
@@ -137,28 +152,28 @@ describe('model gameScreen', function() {
     });
   });
 
-  describe('getNeighbors', function() {
+  describe('getNeighbors', function () {
     before(function () {
       setInitialModel();
-    })
+    });
 
-    it('return neighboors of the first cell', function() {
+    it('return neighboors of the first cell', function () {
       const neighbors = model.getNeighbors(0, 0);
       assert.equal(neighbors[2], model.cells[1][1], 'the first neighbor of the first cell doesnt right');
       assert.equal(neighbors.length, 3, 'the amount of the neighbors of the first cell doesnt right');
     })
 
-    it('return neighboors of the center cell', function() {
+    it('return neighboors of the center cell', function () {
       const neighbors = model.getNeighbors(1, 1);
       assert.equal(neighbors[4], model.cells[1][2], 'the first neighbor of the center cell doesnt right');
       assert.equal(neighbors.length, 8, 'the amount of the neighbors of the center cell doesnt right');
-    })
+    });
 
-    it('return neighboors of the center right cell', function() {
+    it('return neighboors of the center right cell', function () {
       const neighbors = model.getNeighbors(1, 2);
       assert.equal(neighbors[0], model.cells[0][1], 'the first neighbor of the last cell doesnt right');
       assert.equal(neighbors.length, 5, 'the amount of the neighbors of the center right cell doesnt right');
-    })
+    });
   });
 
   describe('setGameActive', function () {
@@ -168,16 +183,16 @@ describe('model gameScreen', function() {
 
     it('set gameIsAlive to true', function () {
       model.setGameActive(true);
-      assert.isTrue(model.gameIsActive)
+      assert.isTrue(model.gameIsActive);
     });
 
     it('set gameIsAlive to false', function () {
       model.setGameActive(false);
-      assert.isFalse(model.gameIsActive)
+      assert.isFalse(model.gameIsActive);
     });
 
     it('return this', () => {
-      assert.equal(model.setGameActive(true), model, 'doesnt return this')
+      assert.equal(model.setGameActive(true), model, 'doesnt return this');
     });
   });
 
@@ -188,12 +203,12 @@ describe('model gameScreen', function() {
 
     it('set argument to numOfRows, if it less than maxRows', function () {
       model.setNumOfRows(4);
-      assert.equal(model.numOfRows, 4, 'doesnt set num of rows right')
+      assert.equal(model.numOfRows, 4, 'doesnt set num of rows right');
     });
 
     it('set maxRows to numOfRows, if it more than maxRows', function () {
       model.setNumOfRows(model.maxRows + 10);
-      assert.equal(model.numOfRows, model.maxRows, 'doesnt set num of rows right')
+      assert.equal(model.numOfRows, model.maxRows, 'doesnt set num of rows right');
     });
   });
 });
