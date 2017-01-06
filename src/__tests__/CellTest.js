@@ -1,6 +1,6 @@
 import Cell from '../model/Cell';
 
-describe('model cell', function () {
+describe('Model Cell', function () {
   const cell = new Cell();
 
   it('created cell is object', function () {
@@ -8,16 +8,16 @@ describe('model cell', function () {
   });
 
   it('created cell has dead status', function () {
-    assert.equal(cell.isAlive, false);
+    assert.equal(cell.isAlive, false, 'created cell doesnt ahve dead status');
   });
 
   it('set cell to alive', function () {
     cell.setAlive();
-    assert.equal(cell.isAlive, true);
+    assert.equal(cell.isAlive, true, 'doesnt set cell to alive');
   });
 
   it('set cell to dead', function () {
     cell.setDead();
-    assert.equal(cell.isAlive, false);
+    assert.equal(cell.isAlive, false, 'doesnt set cell to alive');
   });
 });

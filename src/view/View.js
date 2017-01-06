@@ -13,7 +13,7 @@ class View extends EventEmitter {
     this.playButton = document.querySelector('.window__button_play');
     this.clearButton = document.querySelector('.window__button_clear');
 
-    this.initialHandlers();
+    this.setInitialHandlers();
   }
 
   draw(cells) {
@@ -37,15 +37,15 @@ class View extends EventEmitter {
     return this;
   }
 
+  getNumberOfRowsInputValue() {
+    return this.numberOfRowsInput.value;
+  }
+
   changePlayButton(isGameActive) {
     if (isGameActive) this.playButton.textContent = 'Pause';
     else this.playButton.textContent = 'Play';
 
     return this;
-  }
-
-  getNumberOfRowsInputValue() {
-    return this.numberOfRowsInput.value;
   }
 
   changeNumberOfRowsInputValue(value) {
@@ -58,16 +58,6 @@ class View extends EventEmitter {
     while (this.gameBoard.children.length) {
       this.gameBoard.removeChild(this.gameBoard.children[0]);
     }
-
-    return this;
-  }
-
-  initialHandlers() {
-    document.addEventListener('DOMContentLoaded', () => this.emit('pageIsReady'));
-
-    this.numberOfRowsInput.onblur = () => this.emit('changeRows');
-    this.playButton.onclick = () => this.emit('playOrPause');
-    this.clearButton.onclick = () => this.emit('clearCells');
 
     return this;
   }
@@ -89,6 +79,16 @@ class View extends EventEmitter {
   makeDead(modelCell, elemCell) {
     this.emit('setModelCellDead', modelCell);
     elemCell.classList.remove('window__cell_enable');
+
+    return this;
+  }
+
+  setInitialHandlers() {
+    document.addEventListener('DOMContentLoaded', () => this.emit('pageIsReady'));
+
+    this.numberOfRowsInput.onblur = () => this.emit('changeRows');
+    this.playButton.onclick = () => this.emit('playOrPause');
+    this.clearButton.onclick = () => this.emit('clearCells');
 
     return this;
   }

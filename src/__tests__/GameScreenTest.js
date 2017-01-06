@@ -1,7 +1,7 @@
 import Model from '../model/GameScreen';
 import * as Cell from '../model/Cell';
 
-Cell.default = class testCell {
+Cell.default = class TestCell {
   constructor() {
     this.isAlive = false;
   }
@@ -15,7 +15,7 @@ Cell.default = class testCell {
   }
 };
 
-describe('model gameScreen', function() {
+describe('Model GameScreen', function() {
   const model = new Model();
 
   const VertLineCells = [
@@ -201,12 +201,12 @@ describe('model gameScreen', function() {
       setInitialModel();
     });
 
-    it('set argument to numOfRows, if it less than maxRows', function () {
+    it('set argument to numOfRows, if argument is less than the maxRows', function () {
       model.setNumOfRows(4);
       assert.equal(model.numOfRows, 4, 'doesnt set num of rows right');
     });
 
-    it('set maxRows to numOfRows, if it more than maxRows', function () {
+    it('set maxRows to numOfRows, if argument is more than the maxRows', function () {
       model.setNumOfRows(model.maxRows + 10);
       assert.equal(model.numOfRows, model.maxRows, 'doesnt set num of rows right');
     });
