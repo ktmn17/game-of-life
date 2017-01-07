@@ -1,4 +1,4 @@
-import View from '../view/View.js';
+import View from '../view/View';
 
 describe('View', function() {
   const stubSetInitialHandlers = sinon.stub(View.prototype, 'setInitialHandlers');
