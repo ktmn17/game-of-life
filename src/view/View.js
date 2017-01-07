@@ -84,8 +84,6 @@ class View extends EventEmitter {
   }
 
   setInitialHandlers() {
-    document.addEventListener('DOMContentLoaded', () => this.emit('pageIsReady'));
-
     this.numberOfRowsInput.onblur = () => this.emit('changeRows');
     this.playButton.onclick = () => this.emit('playOrPause');
     this.clearButton.onclick = () => this.emit('clearCells');

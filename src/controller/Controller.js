@@ -13,7 +13,7 @@ export default class Controller {
     const setBeginGame = this.setBeginGame.bind(this);
     const toggleGameActive = this.toggleGameActive.bind(this);
 
-    this.view.on('pageIsReady', setBeginGame);
+    setBeginGame();
     this.view.on('changeRows', setBeginGame);
     this.view.on('playOrPause', toggleGameActive);
     this.view.on('clearCells', setBeginGame);

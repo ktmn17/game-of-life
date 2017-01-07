@@ -15,19 +15,22 @@ describe('View', function() {
   const spyToogleCell = sinon.spy(view, 'toogleCell');
   const spyMakeAlive = sinon.spy(view, 'makeAlive');
   const spyMakeDead = sinon.spy(view, 'makeDead');
+  const spyEmit = sinon.spy(view, 'emit');
 
   const resetAllSpies = function reset() {
+    stubSetInitialHandlers.reset();
     spyRemoveElemCells.reset();
     spyCreateElemRow.reset();
     spyCreateElemCell.reset();
     spyToogleCell.reset();
     spyMakeAlive.reset();
     spyMakeDead.reset();
+    spyEmit.reset();
   };
 
   stubSetInitialHandlers.restore();
 
-  describe('draw initial layout', function () {
+  describe('set up initial layout', function () {
     it('draw window', function () {
       const window = document.querySelectorAll('.window');
       assert.equal(window.length, 1, 'doesnt draw window');
@@ -43,6 +46,11 @@ describe('View', function() {
       assert.equal(window__game.length, 1, 'doesnt draw window__game');
     });
 
+    it('save window__game in view.gameBoard', function () {
+      const window__game = document.querySelector('.window__game');
+      assert.equal(window__game, view.gameBoard, 'doesnt save window__game in view.gameBoard');
+    });
+
     it('draw window__controller', function () {
       const window__controller = document.querySelectorAll('.window__controller');
       assert.equal(window__controller.length, 1, 'doesnt draw window__controller');
@@ -53,69 +61,77 @@ describe('View', function() {
       assert.equal(window__input.length, 1, 'doesnt draw window__input');
     });
 
+    it('save window__input in view.numberOfRowsInput', function () {
+      const window__input = document.querySelector('.window__input');
+      assert.equal(window__input, view.numberOfRowsInput, 'doesnt save window__input in view.numberOfRowsInput');
+    });
+
     it('draw window__button_play', function () {
       const window__button_play = document.querySelectorAll('.window__button_play');
       assert.equal(window__button_play.length, 1, 'doesnt draw window__button_play');
+    });
+
+    it('save window__button_play in view.playButton', function () {
+      const window__button_play = document.querySelector('.window__button_play');
+      assert.equal(window__button_play, view.playButton, 'doesnt save window__button_play in view.playButton');
     });
 
     it('draw window__button_clear', function () {
       const window__button_clear = document.querySelectorAll('.window__button_clear');
       assert.equal(window__button_clear.length, 1, 'doesnt draw window__button_clear');
     });
+
+    it('save window__button_clear in view.clearButton', function () {
+      const window__button_clear = document.querySelector('.window__button_clear');
+      assert.equal(window__button_clear, view.clearButton, 'doesnt save window__button_clear in view.clearButton');
+    });
+
+    it('call setInitialHandlers', function () {
+      sinon.assert.calledOnce(stubSetInitialHandlers);
+    })
   });
 
-  describe('draw (center vertical line on 3x3)', function() {
-    before(function () {
-      view.draw(VertLineCells);
-    });
+  describe('draw', function() {
+    describe('center vertical line on 3x3', function () {
+      before(function () {
+        resetAllSpies();
+        view.draw(VertLineCells);
+      });
 
-    after(function () {
-      resetAllSpies();
-    });
+      it('call removeElemCells once', function () {
+        sinon.assert.calledOnce(spyRemoveElemCells);
+      });
 
-    it('call removeElemCells once', function () {
-      sinon.assert.calledOnce(spyRemoveElemCells);
-    });
+      it('call createElemRow thrice', function () {
+        sinon.assert.calledThrice(spyCreateElemRow);
+      });
 
-    it('call createElemRow thrice', function () {
-      sinon.assert.calledThrice(spyCreateElemRow);
-    });
+      it('call createElemCell nine times', function () {
+        sinon.assert.callCount(spyCreateElemCell, 9);
+      });
 
-    it('call createElemCell thrice', function () {
-      sinon.assert.callCount(spyCreateElemCell, 9);
-    });
+      it('call makeAlive thrice', function () {
+        sinon.assert.callCount(spyMakeAlive, 3);
+      });
 
-    it('call makeAlive thrice times', function () {
-      sinon.assert.callCount(spyMakeAlive, 3);
-    });
+      it('call makeDead six times', function () {
+        sinon.assert.callCount(spyMakeDead, 6);
+      });
 
-    it('call makeDead six times', function () {
-      sinon.assert.callCount(spyMakeDead, 6);
-    });
+      it('call toggleCell after click on cell', function() {
+        const click = new Event('click');
+        const cellElems = document.querySelectorAll('.window__cell');
 
-    it('call toggleCell after click on cell', function() {
-      const click = new Event('click');
-      const cellElems = document.querySelectorAll('.window__cell');
+        cellElems[0].dispatchEvent(click);
+        sinon.assert.calledOnce(spyToogleCell);
+        cellElems[8].dispatchEvent(click);
+        sinon.assert.calledTwice(spyToogleCell);
+      });
 
-      cellElems[0].dispatchEvent(click);
-      sinon.assert.calledOnce(spyToogleCell);
-      cellElems[8].dispatchEvent(click);
-      sinon.assert.calledTwice(spyToogleCell);
-    });
-
-    it('draw at least one element', function() {
-      const cellElems = document.querySelectorAll('.window__cell');
-      assert(cellElems.length, 'doesnt draw anything');
-    });
-
-    it('add to the last elem class window__cell', function() {
-      const cellElems = document.querySelectorAll('.window__cell');
-      assert(cellElems[8].classList.contains('window__cell'), 'doesnt add to the last elem class window__cell');
-    });
-
-    it('add to the needed elem (1) class window__cell_enable', function() {
-      const cellElems = document.querySelectorAll('.window__cell');
-      assert(cellElems[1].classList.contains('window__cell_enable'), 'doesnt add to the needed elem class window__cell_enable');
+      it('draw on gameBoard nine window__cell', function() {
+        const cellElems = view.gameBoard.querySelectorAll('.window__cell');
+        assert.equal(cellElems.length, 9, 'doesnt draw on gameBoard nine window__cell');
+      });
     });
 
     it('return this', function () {
@@ -158,6 +174,168 @@ describe('View', function() {
 
     it('return this', function () {
       assert.equal(view.changeNumberOfRowsInputValue(), view, 'doesnt return this');
+    });
+  });
+
+  describe('removeElemCells', function () {
+    before(function () {
+      for (let i = 0; i < 10; i += 1) {
+        const elemCell = document.createElement('div');
+        elemCell.classList.add('window__cell');
+        view.gameBoard.appendChild(elemCell);
+      };
+    });
+
+    it('remove all elements on game board', function () {
+      view.removeElemCells();
+      assert.equal(view.gameBoard.children.length, 0, 'doesnt remove all elements on game board');
+    });
+
+    it('return this', function () {
+      assert.equal(view.removeElemCells(), view, 'doesnt return this');
+    });
+  });
+
+  describe('toogleCell', function () {
+    before(function () {
+      resetAllSpies();
+    });
+
+    it('call makeDead if cell is alive', function () {
+      const modelCell = { isAlive: true };
+      const elemCell = document.createElement('div');
+
+      view.toogleCell(modelCell, elemCell);
+      sinon.assert.calledWith(spyMakeDead, modelCell, elemCell);
+    });
+
+    it('call makeAlive if cell is dead', function () {
+      const modelCell = { isAlive: false };
+      const elemCell = document.createElement('div');
+
+      view.toogleCell(modelCell, elemCell);
+      sinon.assert.calledWith(spyMakeAlive, modelCell, elemCell);
+    });
+
+    it('return this', function () {
+      const modelCell = { isAlive: false };
+      const elemCell = document.createElement('div');
+
+      assert.equal(view.toogleCell(modelCell, elemCell), view, 'doesnt return this');
+    });
+  });
+
+  describe('makeAlive', function () {
+    before(function () {
+      resetAllSpies();
+    });
+
+    it('call emit setModelCellAlive', function () {
+      const modelCell = { isAlive: false };
+      const elemCell = document.createElement('div');
+
+      view.makeAlive(modelCell, elemCell);
+      sinon.assert.calledWith(spyEmit, 'setModelCellAlive', modelCell);
+    });
+
+    it('add to elemCell class window__cell_enable', function () {
+      const modelCell = { isAlive: false };
+      const elemCell = document.createElement('div');
+
+      view.makeAlive(modelCell, elemCell);
+      assert(elemCell.classList.contains('window__cell_enable'), 'doesnt add elemCell class window__cell_enable');
+    });
+
+    it('return this', function () {
+      const modelCell = { isAlive: false };
+      const elemCell = document.createElement('div');
+
+      assert.equal(view.makeAlive(modelCell, elemCell), view, 'doesnt return this');
+    });
+  });
+
+  describe('makeDead', function () {
+    before(function () {
+      resetAllSpies();
+    });
+
+    it('call emit setModelCellDead', function () {
+      const modelCell = { isAlive: true };
+      const elemCell = document.createElement('div');
+
+      view.makeDead(modelCell, elemCell);
+      sinon.assert.calledWith(spyEmit, 'setModelCellDead', modelCell);
+    });
+
+    it('remove out elemCell class window__cell_enable', function () {
+      const modelCell = { isAlive: true };
+      const elemCell = document.createElement('div');
+
+      view.makeDead(modelCell, elemCell);
+      assert(!elemCell.classList.contains('window__cell_enable'), 'doesnt remove elemCell class window__cell_enable');
+    });
+
+    it('return this', function () {
+      const modelCell = { isAlive: false };
+      const elemCell = document.createElement('div');
+
+      assert.equal(view.makeDead(modelCell, elemCell), view, 'doesnt return this');
+    });
+  });
+
+  describe('setInitialHandlers', function () {
+    before(function () {
+      resetAllSpies();
+      view.setInitialHandlers();
+    });
+
+    it('call emit changeRows when numberOfRowsInput unfocused', function () {
+      const blur = new Event('blur');
+      view.numberOfRowsInput.dispatchEvent(blur);
+
+      sinon.assert.calledWith(spyEmit, 'changeRows');
+    });
+
+    it('call emit playOrPause when playButton click', function () {
+      const click = new Event('click');
+      view.playButton.dispatchEvent(click);
+
+      sinon.assert.calledWith(spyEmit, 'playOrPause');
+    });
+
+    it('call emit clearCells when clearButton click', function () {
+      const click = new Event('click');
+      view.clearButton.dispatchEvent(click);
+
+      sinon.assert.calledWith(spyEmit, 'clearCells');
+    });
+
+    it('return this', function () {
+      assert.equal(view.setInitialHandlers(), view, 'doesnt return this');
+    });
+  });
+
+  describe('createElemRow', function () {
+    const elemRow = View.createElemRow();
+
+    it('elemRow has div tag', function () {
+      assert.equal(elemRow.tagName, 'DIV', 'elemRow doesnt have div tag')
+    });
+
+    it('elemRow has class window__row', function () {
+      assert(elemRow.classList.contains('window__row'), 'elemRow doesnt have class window__row');
+    });
+  });
+
+  describe('createElemCell', function () {
+    const elemCell = View.createElemCell();
+
+    it('elemCell has div tag', function () {
+      assert.equal(elemCell.tagName, 'DIV', 'elemCell doesnt have div tag')
+    });
+
+    it('elemCell has class window__cell', function () {
+      assert(elemCell.classList.contains('window__cell'), 'elemCell doesnt have class window__cell');
     });
   });
 });
