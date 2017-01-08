@@ -15,7 +15,7 @@ Cell.default = class TestCell {
   }
 };
 
-describe('Model GameScreen', function() {
+describe('Model GameScreen', function () {
   const model = new Model();
 
   const VertLineCells = [
@@ -30,6 +30,27 @@ describe('Model GameScreen', function() {
     model.maxRows = 5;
     model.gameIsActive = false;
   };
+
+  it('model.numOfRows equals 0', function () {
+    assert.strictEqual(model.numOfRows, 0, 'numOfRows doesnt strictEqual 0');
+  });
+
+  it('model.maxRows equals 40', function () {
+    assert.strictEqual(model.maxRows, 40, 'maxRows doesnt strictEqual 40');
+  });
+
+  it('model.cells equals []', function () {
+    assert.isArray(model.cells, 'numOfRows doesnt array');
+    assert.strictEqual(model.cells.length, 0, 'numOfRows doesnt strictEqual []');
+  });
+
+  it('model.gameIsActive equals false', function () {
+    assert.strictEqual(model.gameIsActive, false, 'gameIsActive doesnt strictEqual false');
+  });
+
+  it('model.delay equals 500', function () {
+    assert.strictEqual(model.delay, 500, 'delay doesnt strictEqual 500');
+  });
 
   describe('setInitialCells', function () {
     describe('set initial cells 3x3', function () {
@@ -46,16 +67,16 @@ describe('Model GameScreen', function() {
       });
 
       it('cells has 3 rows', () => {
-        assert.equal(model.cells.length, 3, 'model.cell doesnt have 3 rows');
+        assert.strictEqual(model.cells.length, 3, 'model.cell doesnt have 3 rows');
       });
 
       it('cells has 3 cells in last row', () => {
-        assert.equal(model.cells[2].length, 3, 'model.cell doesnt have 3 cells in last row');
+        assert.strictEqual(model.cells[2].length, 3, 'model.cell doesnt have 3 cells in last row');
       });
     });
 
     it('return this', () => {
-      assert.equal(model.setInitialCells(), model, 'doesnt return this');
+      assert.strictEqual(model.setInitialCells(), model, 'doesnt return this');
     });
   });
 
@@ -81,15 +102,15 @@ describe('Model GameScreen', function() {
         stubGetAliveNeighbors.restore();
       });
 
-      it('set dead the top cell of the line', function() {
+      it('set dead the top cell of the line', function () {
         assert.isFalse(model.cells[0][1].isAlive, 'the update line of three cell doesnt right');
       });
 
-      it('set alive the left cell of the line', function() {
+      it('set alive the left cell of the line', function () {
         assert.isTrue(model.cells[1][0].isAlive, 'the update line of three cell doesnt right');
       });
 
-      it('retain alive the center cell of the line', function() {
+      it('retain alive the center cell of the line', function () {
         assert.isTrue(model.cells[1][1].isAlive, 'the update line of three cell doesnt right');
       });
 
@@ -103,7 +124,7 @@ describe('Model GameScreen', function() {
     });
 
     it('return this', () => {
-      assert.equal(model.setNextStepCells(), model, 'doesnt return this');
+      assert.strictEqual(model.setNextStepCells(), model, 'doesnt return this');
     });
   });
 
@@ -132,7 +153,7 @@ describe('Model GameScreen', function() {
 
     it('return 0 of cell with 0 alive neighbors', function () {
       const aliveNeighbors = model.getAliveNeighbors();
-      assert.equal(aliveNeighbors, 0, 'the amount of the alive neighbors doesnt right of the cell with 2 alive neighbors');
+      assert.strictEqual(aliveNeighbors, 0, 'the amount of the alive neighbors doesnt right of the cell with 2 alive neighbors');
     });
 
     it('return 2 of cell with 2 alive neighbors', function () {
@@ -140,7 +161,7 @@ describe('Model GameScreen', function() {
       neighb[6].isAlive = true;
 
       const aliveNeighbors = model.getAliveNeighbors();
-      assert.equal(aliveNeighbors, 2, 'the amount of the alive neighbors doesnt right of the cell with 2 alive neighbors');
+      assert.strictEqual(aliveNeighbors, 2, 'the amount of the alive neighbors doesnt right of the cell with 2 alive neighbors');
     });
 
     it('return 4 of cell with 4 alive neighbors', function () {
@@ -148,7 +169,7 @@ describe('Model GameScreen', function() {
       neighb[7].isAlive = true;
 
       const aliveNeighbors = model.getAliveNeighbors();
-      assert.equal(aliveNeighbors, 4, 'the amount of the alive neighbors doesnt right of the cell with 2 alive neighbors');
+      assert.strictEqual(aliveNeighbors, 4, 'the amount of the alive neighbors doesnt right of the cell with 2 alive neighbors');
     });
   });
 
@@ -159,20 +180,20 @@ describe('Model GameScreen', function() {
 
     it('return neighboors of the first cell', function () {
       const neighbors = model.getNeighbors(0, 0);
-      assert.equal(neighbors[2], model.cells[1][1], 'the first neighbor of the first cell doesnt right');
-      assert.equal(neighbors.length, 3, 'the amount of the neighbors of the first cell doesnt right');
-    })
+      assert.strictEqual(neighbors[2], model.cells[1][1], 'the first neighbor of the first cell doesnt right');
+      assert.strictEqual(neighbors.length, 3, 'the amount of the neighbors of the first cell doesnt right');
+    });
 
     it('return neighboors of the center cell', function () {
       const neighbors = model.getNeighbors(1, 1);
-      assert.equal(neighbors[4], model.cells[1][2], 'the first neighbor of the center cell doesnt right');
-      assert.equal(neighbors.length, 8, 'the amount of the neighbors of the center cell doesnt right');
+      assert.strictEqual(neighbors[4], model.cells[1][2], 'the first neighbor of the center cell doesnt right');
+      assert.strictEqual(neighbors.length, 8, 'the amount of the neighbors of the center cell doesnt right');
     });
 
     it('return neighboors of the center right cell', function () {
       const neighbors = model.getNeighbors(1, 2);
-      assert.equal(neighbors[0], model.cells[0][1], 'the first neighbor of the last cell doesnt right');
-      assert.equal(neighbors.length, 5, 'the amount of the neighbors of the center right cell doesnt right');
+      assert.strictEqual(neighbors[0], model.cells[0][1], 'the first neighbor of the last cell doesnt right');
+      assert.strictEqual(neighbors.length, 5, 'the amount of the neighbors of the center right cell doesnt right');
     });
   });
 
@@ -192,7 +213,7 @@ describe('Model GameScreen', function() {
     });
 
     it('return this', () => {
-      assert.equal(model.setGameActive(true), model, 'doesnt return this');
+      assert.strictEqual(model.setGameActive(true), model, 'doesnt return this');
     });
   });
 
@@ -203,12 +224,12 @@ describe('Model GameScreen', function() {
 
     it('set argument to numOfRows, if argument is less than the maxRows', function () {
       model.setNumOfRows(4);
-      assert.equal(model.numOfRows, 4, 'doesnt set num of rows right');
+      assert.strictEqual(model.numOfRows, 4, 'doesnt set num of rows right');
     });
 
     it('set maxRows to numOfRows, if argument is more than the maxRows', function () {
       model.setNumOfRows(model.maxRows + 10);
-      assert.equal(model.numOfRows, model.maxRows, 'doesnt set num of rows right');
+      assert.strictEqual(model.numOfRows, model.maxRows, 'doesnt set num of rows right');
     });
   });
 });

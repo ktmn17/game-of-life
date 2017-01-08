@@ -38,7 +38,7 @@ class View extends EventEmitter {
   }
 
   getNumberOfRowsInputValue() {
-    return this.numberOfRowsInput.value;
+    return Number(this.numberOfRowsInput.value);
   }
 
   changePlayButton(isGameActive) {

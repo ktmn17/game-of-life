@@ -1,6 +1,6 @@
 import View from '../view/View';
 
-describe('View', function() {
+describe('View', function () {
   const stubSetInitialHandlers = sinon.stub(View.prototype, 'setInitialHandlers');
 
   const view = new View(3);
@@ -33,62 +33,62 @@ describe('View', function() {
   describe('set up initial layout', function () {
     it('draw window', function () {
       const window = document.querySelectorAll('.window');
-      assert.equal(window.length, 1, 'doesnt draw window');
+      assert.strictEqual(window.length, 1, 'doesnt draw window');
     });
 
     it('draw window__h1', function () {
-      const window__h1 = document.querySelectorAll('.window__h1');
-      assert.equal(window__h1.length, 1, 'doesnt draw window__h1');
+      const windowH1 = document.querySelectorAll('.window__h1');
+      assert.strictEqual(windowH1.length, 1, 'doesnt draw window__h1');
     });
 
     it('draw window__game', function () {
-      const window__game = document.querySelectorAll('.window__game');
-      assert.equal(window__game.length, 1, 'doesnt draw window__game');
+      const windowGame = document.querySelectorAll('.window__game');
+      assert.strictEqual(windowGame.length, 1, 'doesnt draw window__game');
     });
 
     it('save window__game in view.gameBoard', function () {
-      const window__game = document.querySelector('.window__game');
-      assert.equal(window__game, view.gameBoard, 'doesnt save window__game in view.gameBoard');
+      const windowGame = document.querySelector('.window__game');
+      assert.strictEqual(windowGame, view.gameBoard, 'doesnt save window__game in view.gameBoard');
     });
 
     it('draw window__controller', function () {
-      const window__controller = document.querySelectorAll('.window__controller');
-      assert.equal(window__controller.length, 1, 'doesnt draw window__controller');
+      const windowController = document.querySelectorAll('.window__controller');
+      assert.strictEqual(windowController.length, 1, 'doesnt draw window__controller');
     });
 
     it('draw window__input', function () {
-      const window__input = document.querySelectorAll('.window__input');
-      assert.equal(window__input.length, 1, 'doesnt draw window__input');
+      const windowInput = document.querySelectorAll('.window__input');
+      assert.strictEqual(windowInput.length, 1, 'doesnt draw window__input');
     });
 
     it('save window__input in view.numberOfRowsInput', function () {
-      const window__input = document.querySelector('.window__input');
-      assert.equal(window__input, view.numberOfRowsInput, 'doesnt save window__input in view.numberOfRowsInput');
+      const windowInput = document.querySelector('.window__input');
+      assert.strictEqual(windowInput, view.numberOfRowsInput, 'doesnt save window__input in view.numberOfRowsInput');
     });
 
     it('draw window__button_play', function () {
-      const window__button_play = document.querySelectorAll('.window__button_play');
-      assert.equal(window__button_play.length, 1, 'doesnt draw window__button_play');
+      const windowButtonPlay = document.querySelectorAll('.window__button_play');
+      assert.strictEqual(windowButtonPlay.length, 1, 'doesnt draw window__button_play');
     });
 
     it('save window__button_play in view.playButton', function () {
-      const window__button_play = document.querySelector('.window__button_play');
-      assert.equal(window__button_play, view.playButton, 'doesnt save window__button_play in view.playButton');
+      const windowButtonPlay = document.querySelector('.window__button_play');
+      assert.strictEqual(windowButtonPlay, view.playButton, 'doesnt save window__button_play in view.playButton');
     });
 
     it('draw window__button_clear', function () {
-      const window__button_clear = document.querySelectorAll('.window__button_clear');
-      assert.equal(window__button_clear.length, 1, 'doesnt draw window__button_clear');
+      const windowButtonClear = document.querySelectorAll('.window__button_clear');
+      assert.strictEqual(windowButtonClear.length, 1, 'doesnt draw window__button_clear');
     });
 
     it('save window__button_clear in view.clearButton', function () {
-      const window__button_clear = document.querySelector('.window__button_clear');
-      assert.equal(window__button_clear, view.clearButton, 'doesnt save window__button_clear in view.clearButton');
+      const windowButtonClear = document.querySelector('.window__button_clear');
+      assert.strictEqual(windowButtonClear, view.clearButton, 'doesnt save window__button_clear in view.clearButton');
     });
 
     it('call setInitialHandlers', function () {
       sinon.assert.calledOnce(stubSetInitialHandlers);
-    })
+    });
   });
 
   describe('draw', function() {
@@ -130,19 +130,19 @@ describe('View', function() {
 
       it('draw on gameBoard nine window__cell', function() {
         const cellElems = view.gameBoard.querySelectorAll('.window__cell');
-        assert.equal(cellElems.length, 9, 'doesnt draw on gameBoard nine window__cell');
+        assert.strictEqual(cellElems.length, 9, 'doesnt draw on gameBoard nine window__cell');
       });
     });
 
     it('return this', function () {
-      assert.equal(view.draw([]), view, 'doesnt return this');
+      assert.strictEqual(view.draw([]), view, 'doesnt return this');
     });
   });
 
   describe('getNumberOfRowsInputValue', function () {
     it('return number of rows input value', function () {
       view.numberOfRowsInput.value = 5;
-      assert.equal(view.getNumberOfRowsInputValue(), 5, 'doesnt return right number');
+      assert.strictEqual(view.getNumberOfRowsInputValue(), 5, 'doesnt return right number');
     });
   });
 
@@ -150,17 +150,17 @@ describe('View', function() {
     it('change play button to play state', function () {
       view.playButton.textContent = 'Pause';
       view.changePlayButton(false);
-      assert.equal(view.playButton.textContent, 'Play', 'doesnt change play button to play state');
+      assert.strictEqual(view.playButton.textContent, 'Play', 'doesnt change play button to play state');
     });
 
     it('change play button to pause state', function () {
       view.playButton.textContent = 'Play';
       view.changePlayButton(true);
-      assert.equal(view.playButton.textContent, 'Pause', 'doesnt change play button to pause state');
+      assert.strictEqual(view.playButton.textContent, 'Pause', 'doesnt change play button to pause state');
     });
 
     it('return this', function () {
-      assert.equal(view.changePlayButton(), view, 'doesnt return this');
+      assert.strictEqual(view.changePlayButton(), view, 'doesnt return this');
     });
   });
 
@@ -169,11 +169,11 @@ describe('View', function() {
       view.numberOfRowsInput.value = 5;
       view.changeNumberOfRowsInputValue(7);
 
-      assert.equal(view.numberOfRowsInput.value, 7, 'doesnt change number of rows input value right');
+      assert.strictEqual(Number(view.numberOfRowsInput.value), 7, 'doesnt change number of rows input value right');
     });
 
     it('return this', function () {
-      assert.equal(view.changeNumberOfRowsInputValue(), view, 'doesnt return this');
+      assert.strictEqual(view.changeNumberOfRowsInputValue(), view, 'doesnt return this');
     });
   });
 
@@ -183,16 +183,16 @@ describe('View', function() {
         const elemCell = document.createElement('div');
         elemCell.classList.add('window__cell');
         view.gameBoard.appendChild(elemCell);
-      };
+      }
     });
 
     it('remove all elements on game board', function () {
       view.removeElemCells();
-      assert.equal(view.gameBoard.children.length, 0, 'doesnt remove all elements on game board');
+      assert.strictEqual(view.gameBoard.children.length, 0, 'doesnt remove all elements on game board');
     });
 
     it('return this', function () {
-      assert.equal(view.removeElemCells(), view, 'doesnt return this');
+      assert.strictEqual(view.removeElemCells(), view, 'doesnt return this');
     });
   });
 
@@ -221,7 +221,7 @@ describe('View', function() {
       const modelCell = { isAlive: false };
       const elemCell = document.createElement('div');
 
-      assert.equal(view.toogleCell(modelCell, elemCell), view, 'doesnt return this');
+      assert.strictEqual(view.toogleCell(modelCell, elemCell), view, 'doesnt return this');
     });
   });
 
@@ -250,7 +250,7 @@ describe('View', function() {
       const modelCell = { isAlive: false };
       const elemCell = document.createElement('div');
 
-      assert.equal(view.makeAlive(modelCell, elemCell), view, 'doesnt return this');
+      assert.strictEqual(view.makeAlive(modelCell, elemCell), view, 'doesnt return this');
     });
   });
 
@@ -279,7 +279,7 @@ describe('View', function() {
       const modelCell = { isAlive: false };
       const elemCell = document.createElement('div');
 
-      assert.equal(view.makeDead(modelCell, elemCell), view, 'doesnt return this');
+      assert.strictEqual(view.makeDead(modelCell, elemCell), view, 'doesnt return this');
     });
   });
 
@@ -311,7 +311,7 @@ describe('View', function() {
     });
 
     it('return this', function () {
-      assert.equal(view.setInitialHandlers(), view, 'doesnt return this');
+      assert.strictEqual(view.setInitialHandlers(), view, 'doesnt return this');
     });
   });
 
@@ -319,7 +319,7 @@ describe('View', function() {
     const elemRow = View.createElemRow();
 
     it('elemRow has div tag', function () {
-      assert.equal(elemRow.tagName, 'DIV', 'elemRow doesnt have div tag')
+      assert.strictEqual(elemRow.tagName, 'DIV', 'elemRow doesnt have div tag');
     });
 
     it('elemRow has class window__row', function () {
@@ -331,7 +331,7 @@ describe('View', function() {
     const elemCell = View.createElemCell();
 
     it('elemCell has div tag', function () {
-      assert.equal(elemCell.tagName, 'DIV', 'elemCell doesnt have div tag')
+      assert.strictEqual(elemCell.tagName, 'DIV', 'elemCell doesnt have div tag');
     });
 
     it('elemCell has class window__cell', function () {

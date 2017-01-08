@@ -8,16 +8,16 @@ describe('Model Cell', function () {
   });
 
   it('created cell has dead status', function () {
-    assert.equal(cell.isAlive, false, 'created cell doesnt have dead status');
+    assert.strictEqual(cell.isAlive, false, 'created cell doesnt have dead status');
   });
 
   it('setAlive', function () {
     cell.setAlive();
-    assert.equal(cell.isAlive, true, 'doesnt set cell to alive');
+    assert.strictEqual(cell.isAlive, true, 'doesnt set cell to alive');
   });
 
   it('setDead', function () {
     cell.setDead();
-    assert.equal(cell.isAlive, false, 'doesnt set cell to dead');
+    assert.strictEqual(cell.isAlive, false, 'doesnt set cell to dead');
   });
 });
