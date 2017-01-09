@@ -28,13 +28,13 @@ module.exports = function (config) {
     },
 
     plugins: [
-      require('karma-webpack'),
-      require('karma-mocha'),
-      require('karma-chai'),
-      require('karma-sinon'),
-      require('karma-sinon-chai'),
-      require('karma-mocha-reporter'),
-      require('karma-phantomjs-launcher'),
+      'karma-webpack',
+      'karma-mocha',
+      'karma-chai',
+      'karma-sinon',
+      'karma-sinon-chai',
+      'karma-mocha-reporter',
+      'karma-phantomjs-launcher',
     ],
   });
 };

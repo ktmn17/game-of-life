@@ -17,7 +17,7 @@ describe('View', function () {
   const spyMakeDead = sinon.spy(view, 'makeDead');
   const spyEmit = sinon.spy(view, 'emit');
 
-  const resetAllSpies = function reset() {
+  const resetAllSinon = function reset() {
     stubSetInitialHandlers.reset();
     spyRemoveElemCells.reset();
     spyCreateElemRow.reset();
@@ -94,7 +94,7 @@ describe('View', function () {
   describe('draw', function() {
     describe('center vertical line on 3x3', function () {
       before(function () {
-        resetAllSpies();
+        resetAllSinon();
         view.draw(VertLineCells);
       });
 
@@ -198,7 +198,7 @@ describe('View', function () {
 
   describe('toogleCell', function () {
     before(function () {
-      resetAllSpies();
+      resetAllSinon();
     });
 
     it('call makeDead if cell is alive', function () {
@@ -227,7 +227,7 @@ describe('View', function () {
 
   describe('makeAlive', function () {
     before(function () {
-      resetAllSpies();
+      resetAllSinon();
     });
 
     it('call emit setModelCellAlive', function () {
@@ -256,7 +256,7 @@ describe('View', function () {
 
   describe('makeDead', function () {
     before(function () {
-      resetAllSpies();
+      resetAllSinon();
     });
 
     it('call emit setModelCellDead', function () {
@@ -285,7 +285,7 @@ describe('View', function () {
 
   describe('setInitialHandlers', function () {
     before(function () {
-      resetAllSpies();
+      resetAllSinon();
       view.setInitialHandlers();
     });
 

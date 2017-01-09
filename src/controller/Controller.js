@@ -10,18 +10,16 @@ export default class Controller {
   }
 
   setUpGame() {
-    const setBeginGame = this.setBeginGame.bind(this);
-    const toggleGameActive = this.toggleGameActive.bind(this);
+    this.setBeginGame();
 
-    setBeginGame();
-    this.view.on('changeRows', setBeginGame);
-    this.view.on('playOrPause', toggleGameActive);
-    this.view.on('clearCells', setBeginGame);
+    this.view.on('changeRows', this.setBeginGame);
+    this.view.on('playOrPause', this.toggleGameActive);
+    this.view.on('clearCells', this.setBeginGame);
     this.view.on('setModelCellAlive', modelCell => modelCell.setAlive());
     this.view.on('setModelCellDead', modelCell => modelCell.setDead());
   }
 
-  setBeginGame() {
+  setBeginGame = () => {
     if (this.model.gameIsActive) {
       this.pauseGame();
     }
@@ -33,7 +31,7 @@ export default class Controller {
     return this;
   }
 
-  toggleGameActive() {
+  toggleGameActive = () => {
     if (this.model.gameIsActive) this.pauseGame();
     else this.startGame();
 

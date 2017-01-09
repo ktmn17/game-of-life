@@ -65,7 +65,7 @@ describe('Controller', function () {
       sinon.assert.calledOnce(spySetBeginGame);
     });
 
-    it('call setBeginGame after view event playOrPause', function () {
+    it('call toggleGameActive after view event playOrPause', function () {
       controller.view.emit('playOrPause');
       sinon.assert.calledOnce(spyToggleGameActive);
     });
